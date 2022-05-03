@@ -1,0 +1,25 @@
+{
+  "fields" : [
+    {
+      "name": "numeric",
+      "title": "A numeric field",
+      "description": "A column with numeric values",
+      "type": "number"
+    }, {
+      "name": "integer",
+      "title": "A integer field",
+      "description": "A column with integer values",
+      "type": "integer"
+    }, {
+      "name": "boolean",
+      "title": "A boolean field",
+      "description": "A column with boolean values",
+      "type": "boolean"
+    }, {
+      "name": "date",
+      "title": "A date field",
+      "description": "A column with date values",
+      "type": "date"
+    }
+  ]
+}
