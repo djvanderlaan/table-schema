@@ -8,6 +8,10 @@ complete_schema_boolean <- function(schema) {
   schema
 }
 
+to_boolean <- function(x, schema = list() {
+  UseMethod("to_boolean")
+}
+
 to_boolean.integer <- function(x, schema = list()) {
   schema <- complete_schema_boolean(schema)
   true_values <- suppressWarnings(as.integer(schema$trueValues))
@@ -48,6 +52,11 @@ to_boolean.character <- function(x, schema = list()) {
   if (any(invalid)) 
     stop("Invalid values found: '", x[head(which(invalid), 1)], "'.")
   structure(res, schema = schema)
+}
+
+to_boolean.logical <- function(x, schema = list()) {
+  schema <- complete_schema_boolean(schema)
+  structure(x, schema = schema)
 }
 
 
