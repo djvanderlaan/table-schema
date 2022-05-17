@@ -44,7 +44,7 @@ expect_equal(res, c(10L, -100L, NA_integer_), attributes = FALSE)
 expect_attribute(res, "schema", schema)
 
 # === Empty input
-res <- to_integer(integer(0))
+res <- to_integer(character(0))
 expect_equal(res, integer(0), attributes = FALSE)
 res <- to_integer(character(0))
 expect_equal(res, integer(0), attributes = FALSE)

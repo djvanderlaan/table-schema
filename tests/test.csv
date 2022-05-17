@@ -1,0 +1,7 @@
+string1,integer1,boolean1,number1
+a,1,true,1.20
+b,-100,false,-1E-4
+c,,true,Inf
+,+100,TRUE,1E4
+f,-0,,NaN
+g,+0,False,

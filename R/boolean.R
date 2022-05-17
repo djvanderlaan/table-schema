@@ -8,7 +8,7 @@ complete_schema_boolean <- function(schema) {
   schema
 }
 
-to_boolean <- function(x, schema = list() {
+to_boolean <- function(x, schema = list()) {
   UseMethod("to_boolean")
 }
 

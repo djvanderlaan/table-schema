@@ -1,0 +1,17 @@
+{
+  "fields" : [ 
+    {
+      "name" : "string1",
+      "type" : "string"
+    }, {
+      "name" : "integer1",
+      "type" : "integer"
+    }, {
+      "name" : "boolean1",
+      "type" : "boolean"
+    }, {
+      "name" : "number1",
+      "type" : "number"
+    }
+  ]
+}

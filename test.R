@@ -25,3 +25,23 @@ for (i in seq_along(schema$fields)) {
   }
 }
 
+
+
+for (file in list.files("R", "*.R", full.names = TRUE)) source(file)
+
+schema <- jsonlite::read_json("tests/test.csv.schema.json")
+
+colclasses <- sapply(schema$fields, colclass)
+colnames <- sapply(schema$fields, function(x) x$name)
+
+dta <- read.csv("tests/test.csv", colClasses = colclasses, stringsAsFactors = FALSE)
+
+stopifnot(names(dta) == colnames)
+
+for (i in seq_along(dta)) {
+  fun <- paste0("to_", schema$fields[[i]]$type)
+  stopifnot(exists(fun))
+  dta[[i]] <- do.call(fun, list(dta[[i]], schema$fields[[i]]))
+}
+
+
