@@ -12,6 +12,16 @@
     }, {
       "name" : "number1",
       "type" : "number"
+    }, {
+      "name" : "number2",
+      "type" : "number",
+      "decimalChar" : "$",
+      "groupChar" : " "
+    }, {
+      "name" : "boolean2",
+      "type" : "boolean",
+      "trueValues" : ["TRUE"],
+      "falseValues" : ["FALSE"]
     }
   ]
 }

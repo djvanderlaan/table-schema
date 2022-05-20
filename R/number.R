@@ -21,7 +21,8 @@ to_number.character <- function(x, schema = list()) {
   na <- x %in% na_values | is.na(x);
   if (!is.null(schema$groupChar)) 
     x <- gsub(schema$groupChar, "", x, fixed = TRUE)
-  if (schema$decimalChar == ",") x <- gsub(",", ".", x, fixed = TRUE)
+  if (schema$decimalChar != ".") 
+    x <- gsub(schema$decimalChar, ".", x, fixed = TRUE)
   res <- suppressWarnings(as.numeric(x))
   invalid <- is.na(res) & !na & !is.nan(res)
   if (any(invalid)) 
