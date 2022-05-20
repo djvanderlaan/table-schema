@@ -18,7 +18,7 @@ expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
   attributes = FALSE)
 
 dta <- sread_csv("tests/test.csv", 
-  schema_filename = "tests/tests.csv.schema.json")
+  schema = "tests/test.schema.json")
 expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
   attributes = FALSE)
 expect_equal(dta$integer1, c(1, -100, NA, 100, 0, 0),
@@ -48,7 +48,7 @@ expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
   attributes = FALSE)
 
 dta <- sread_csv("tests/test2.csv", 
-  schema_filename = "tests/tests.csv.schema.json")
+  schema = "tests/test.schema.json")
 expect_equal(dta$string1, character(0),
   attributes = FALSE)
 expect_equal(dta$integer1, integer(0),
