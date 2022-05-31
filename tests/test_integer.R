@@ -1,5 +1,5 @@
-source("R/integer.R")
-source("tests/helpers.R")
+library(tableschema)
+source("helpers.R")
 
 
 schema <- list(
@@ -8,10 +8,10 @@ schema <- list(
   description = "A description",
   type = "integer"
 )
-res <- to_integer.character(c("10", "-100", "", NA), schema = schema)
+res <- tableschema:::to_integer.character(c("10", "-100", "", NA), schema = schema)
 expect_equal(res, c(10L, -100L, NA_integer_, NA_integer_), attributes = FALSE)
 expect_attribute(res, "schema", schema)
-res <- to_integer.integer(c(10, -100, NA), schema = schema)
+res <- tableschema:::to_integer.integer(c(10, -100, NA), schema = schema)
 expect_equal(res, c(10L, -100L, NA_integer_), attributes = FALSE)
 expect_attribute(res, "schema", schema)
 
@@ -36,10 +36,10 @@ expect_attribute(res, "schema", schema)
 schema <- list(
   type = "integer"
 )
-res <- to_integer.character(c("10", "-100", "", NA))
+res <- tableschema:::to_integer.character(c("10", "-100", "", NA))
 expect_equal(res, c(10L, -100L, NA_integer_, NA_integer_), attributes = FALSE)
 expect_attribute(res, "schema", schema)
-res <- to_integer.integer(c(10, -100, NA))
+res <- tableschema:::to_integer.integer(c(10, -100, NA))
 expect_equal(res, c(10L, -100L, NA_integer_), attributes = FALSE)
 expect_attribute(res, "schema", schema)
 

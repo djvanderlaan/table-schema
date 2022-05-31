@@ -1,4 +1,5 @@
 
+#' @export
 complete_schema_boolean <- function(schema) {
   if (!exists("type", schema)) schema[["type"]] <- "boolean"
   if (!exists("trueValues", schema))
@@ -8,10 +9,12 @@ complete_schema_boolean <- function(schema) {
   schema
 }
 
+#' @export
 to_boolean <- function(x, schema = list()) {
   UseMethod("to_boolean")
 }
 
+#' @export
 to_boolean.integer <- function(x, schema = list()) {
   schema <- complete_schema_boolean(schema)
   true_values <- suppressWarnings(as.integer(schema$trueValues))
@@ -34,11 +37,12 @@ to_boolean.integer <- function(x, schema = list()) {
     res[s0] <- FALSE
     invalid <- !(s0 | s1 | is.na(x))
     if (any(invalid)) 
-      stop("Invalid values found: '", x[head(which(invalid), 1)], "'.")
+      stop("Invalid values found: '", x[utils::head(which(invalid), 1)], "'.")
     structure(res, schema = schema)
   }
 }
 
+#' @export
 to_boolean.character <- function(x, schema = list()) {
   schema <- complete_schema_boolean(schema)
   # Unless "" is a true of false value we will consider it a missing value
@@ -50,16 +54,18 @@ to_boolean.character <- function(x, schema = list()) {
   res[s0] <- FALSE
   invalid <- !(s0 | s1 | is.na(x))
   if (any(invalid)) 
-    stop("Invalid values found: '", x[head(which(invalid), 1)], "'.")
+    stop("Invalid values found: '", x[utils::head(which(invalid), 1)], "'.")
   structure(res, schema = schema)
 }
 
+#' @export
 to_boolean.logical <- function(x, schema = list()) {
   schema <- complete_schema_boolean(schema)
   structure(x, schema = schema)
 }
 
 
+#' @export
 colclass_boolean <- function(schema = list()) {
   schema <- complete_schema_boolean(schema)
   res <- "character"

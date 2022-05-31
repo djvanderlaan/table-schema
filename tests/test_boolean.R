@@ -1,5 +1,5 @@
-source("R/boolean.R")
-source("tests/helpers.R")
+library(tableschema)
+source("helpers.R")
 
 
 schema <- list(
@@ -9,28 +9,28 @@ schema <- list(
   type = "boolean"
 )
 
-res <- to_boolean.character(c("TRUE", "FALSE", ""), schema = schema)
+res <- tableschema:::to_boolean.character(c("TRUE", "FALSE", ""), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 expect_attribute(res, "schema", 
   c(schema, list(trueValues = c("true", "TRUE", "True", "1"), 
     falseValues = c("false", "FALSE", "False", "0"))))
 
-res <- to_boolean.character(c("True", "False", ""), schema = schema)
+res <- tableschema:::to_boolean.character(c("True", "False", ""), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 
-res <- to_boolean.character(c("true", "false", ""), schema = schema)
+res <- tableschema:::to_boolean.character(c("true", "false", ""), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 
-res <- to_boolean.character(c("1", "0", ""), schema = schema)
+res <- tableschema:::to_boolean.character(c("1", "0", ""), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 
-res <- to_boolean.character(c(), schema = schema)
+res <- tableschema:::to_boolean.character(c(), schema = schema)
 expect_equal(res, logical(0), attributes = FALSE)
 
-res <- to_boolean.character(c(""), schema = schema)
+res <- tableschema:::to_boolean.character(c(""), schema = schema)
 expect_equal(res, as.logical(NA), attributes = FALSE)
 
-expect_error( to_boolean.character(c("foo", ""), schema = schema) )
+expect_error( tableschema:::to_boolean.character(c("foo", ""), schema = schema) )
 
 
 # ==== Custom trueValues and falseValues
@@ -43,15 +43,15 @@ schema <- list(
   falseValues = "no"
 )
 
-expect_error( to_boolean.character(c("FALSE", "TRUE", ""), schema = schema) )
+expect_error( tableschema:::to_boolean.character(c("FALSE", "TRUE", ""), schema = schema) )
 
-res <- to_boolean.character(c("yes", "no", "", "yes"), schema = schema)
+res <- tableschema:::to_boolean.character(c("yes", "no", "", "yes"), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA, TRUE), attributes = FALSE)
 expect_attribute(res, "schema", schema)
 
 # ==== No schema
 
-res <- to_boolean.character(c("true", "False", "FALSE", "0", "", NA, "TRUE"))
+res <- tableschema:::to_boolean.character(c("true", "False", "FALSE", "0", "", NA, "TRUE"))
 expect_equal(res, c(TRUE, FALSE, FALSE, FALSE, NA, NA, TRUE), attributes = FALSE)
 
 schema <- list(
@@ -69,7 +69,7 @@ schema <- list(
   trueValues = "1",
   falseValues = "0"
 )
-res <- to_boolean.integer(c(1, 0, NA), schema = schema)
+res <- tableschema:::to_boolean.integer(c(1, 0, NA), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 expect_attribute(res, "schema", schema)
 
@@ -78,7 +78,7 @@ schema <- list(
   trueValues = "42",
   falseValues = "0"
 )
-res <- to_boolean.integer(c(42, 0, NA), schema = schema)
+res <- tableschema:::to_boolean.integer(c(42, 0, NA), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 
 schema <- list(
@@ -86,7 +86,7 @@ schema <- list(
   trueValues = "42",
   falseValues = "1"
 )
-res <- to_boolean.integer(c(42, 1, NA), schema = schema)
+res <- tableschema:::to_boolean.integer(c(42, 1, NA), schema = schema)
 expect_equal(res, c(TRUE, FALSE, NA), attributes = FALSE)
 
 schema <- list(
@@ -94,7 +94,7 @@ schema <- list(
   trueValues = c("1", "42"),
   falseValues = "0"
 )
-res <- to_boolean.integer(c(42, 1, 0, NA), schema = schema)
+res <- tableschema:::to_boolean.integer(c(42, 1, 0, NA), schema = schema)
 expect_equal(res, c(TRUE, TRUE, FALSE, NA), attributes = FALSE)
 
 schema <- list(
@@ -102,7 +102,7 @@ schema <- list(
   trueValues = c("1", "one"),
   falseValues = "0"
 )
-expect_error(to_boolean.integer(c(42, 1, 0, NA), schema = schema))
+expect_error(tableschema:::to_boolean.integer(c(42, 1, 0, NA), schema = schema))
 
 schema <- list(
   type = "boolean",
@@ -110,7 +110,7 @@ schema <- list(
   falseValues = "0"
 )
 expect_warning(
-  res <- to_boolean.integer(c(42, 1, 0, NA, 0), schema = schema)
+  res <- tableschema:::to_boolean.integer(c(42, 1, 0, NA, 0), schema = schema)
 )
 expect_equal(res, c(TRUE, TRUE, FALSE, NA, FALSE), attributes = FALSE)
 

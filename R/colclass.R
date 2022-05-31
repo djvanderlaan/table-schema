@@ -1,3 +1,4 @@
+#' @export
 colclass <- function(schema) {
   type <- schema$type
   fun <- paste0("colclass_", type)

@@ -1,6 +1,5 @@
-source("R/string.R")
-source("tests/helpers.R")
-
+library(tableschema)
+source("helpers.R")
 
 schema <- list(
   name = "string",
@@ -8,7 +7,7 @@ schema <- list(
   description = "A description",
   type = "string"
 )
-res <- to_string.character(c("a", "b", "", NA), schema = schema)
+res <- tableschema:::to_string.character(c("a", "b", "", NA), schema = schema)
 expect_equal(res, c("a", "b", "", NA), attributes = FALSE)
 expect_attribute(res, "schema", schema)
 
