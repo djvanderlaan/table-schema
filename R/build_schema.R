@@ -70,6 +70,18 @@ build_schema.character <- function(x, name = NULL) {
 }
 
 #' @export
+build_schema.Date <- function(x, name = NULL) {
+  res <- attr(x, "schema")
+  if (!is.null(res)) {
+    if (!missing(name)) res[["name"]] <- name
+  } else {
+    res <- complete_schema_date(list())
+    if (!missing(name) && !is.null(name)) res[["name"]] <- name
+  }
+  res
+}
+
+#' @export
 build_schema.default <- function(x, name = NULL) {
   res <- attr(x, "schema")
   if (!is.null(res)) {

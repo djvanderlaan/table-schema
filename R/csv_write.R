@@ -3,15 +3,15 @@
 csv_write <- function(x, filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
     ...) {
+  schema_df <- build_schema(x)
   for (col in names(x)) {
     s <- build_schema(x[[col]], col)
     attr(x[[col]], "schema") <- s # setattr for data.table
     x[[col]] <- csv_format(x[[col]], s)
   }
-  s <- build_schema(x)
   utils::write.csv(x, file = filename, na = "", row.names = FALSE, 
     fileEncoding = "UTF-8")
-  write_schema(s, schema)
+  write_schema(schema_df, schema)
 }
 
 #' @export
