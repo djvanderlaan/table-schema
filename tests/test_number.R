@@ -103,9 +103,9 @@ expect_attribute(res, "schema", schema)
 
 
 # =============================================================================
-# colclass
+# csv_colclass
 
-res <- colclass_number(list()) 
+res <- csv_colclass_number(list()) 
 expect_equal(res, "numeric")
 
 schema <- list(
@@ -116,6 +116,6 @@ schema <- list(
   decimalChar = ",",
   groupChar = "."
 )
-res <- colclass_number(schema) 
+res <- csv_colclass_number(schema) 
 expect_equal(res, "character")
 

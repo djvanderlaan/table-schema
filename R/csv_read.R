@@ -3,12 +3,12 @@
 
 
 #' @export
-sread_csv <- function(filename, 
+csv_read <- function(filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
     use_fread = FALSE, ...) {
   if (is.character(schema)) schema <- jsonlite::read_json(schema)
   # Determine how we need to read each of the columns
-  colclasses <- sapply(schema$fields, colclass)
+  colclasses <- sapply(schema$fields, csv_colclass)
   # Read
   if (use_fread) {
     if (!requireNamespace("data.table")) stop("In order to use ", 

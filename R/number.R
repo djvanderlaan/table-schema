@@ -35,12 +35,25 @@ to_number.character <- function(x, schema = list()) {
 }
 
 #' @export
-colclass_number <- function(schema = list()) {
+csv_colclass_number <- function(schema = list()) {
   schema <- complete_schema_number(schema)
   if (!is.null(schema$groupChar) || schema$decimalChar != ".") {
     "character"
   } else {
     "numeric"
   }
+}
+
+#' @export
+csv_format_number <- function(x, schema = attr(x, "schema")) {
+  if (is.null(schema)) schema <- build_schema(x)
+  has_groupchar <- !is.null(schema$groupChar) && schema$groupChar != ""
+  has_decimalchar <- !is.null(schema$decimalChar) && schema$decimalChar != "."
+  x <- as.numeric(x)
+  if (has_groupchar || has_decimalchar) {
+    groupchar <- if (has_groupchar) schema$groupChar else ""
+    decimalchar <- if (has_decimalchar) schema$decimalChar else "."
+    formatC(x, big.mark = groupchar, decimal.mark = decimalchar)
+  } else x
 }
 

@@ -38,7 +38,13 @@ to_integer.character <- function(x, schema = list()) {
 }
 
 #' @export
-colclass_integer <- function(schema = list()) {
+csv_colclass_integer <- function(schema = list()) {
   "integer"
+}
+
+#' @export
+csv_format_integer <- function(x, schema = attr(x, "schema")) {
+  if (is.null(schema)) schema <- build_schema(x)
+  as.integer(x)
 }
 

@@ -66,7 +66,7 @@ to_boolean.logical <- function(x, schema = list()) {
 
 
 #' @export
-colclass_boolean <- function(schema = list()) {
+csv_colclass_boolean <- function(schema = list()) {
   schema <- complete_schema_boolean(schema)
   res <- "character"
   if (length(schema$trueValues) == 1 && length(schema$falseValues) == 1) {
@@ -80,5 +80,20 @@ colclass_boolean <- function(schema = list()) {
       res <- "integer"
   }
   res
+}
+
+#' @export
+csv_format_boolean <- function(x, schema = attr(x, "schema")) {
+  if (is.null(schema)) schema <- build_schema(x)
+  if (is.logical(x) && ("TRUE" %in% schema$trueValues) && 
+      ("FALSE" %in% schema$falseValues)) {
+    # We can write as is as R writes TRUE/FALSE by default
+    x
+  } else {
+    trueval <- utils::head(schema$trueValues, 1)
+    falseval <- utils::head(schema$trueValues, 1)
+    # When x is not logical; we let ifelse handle that
+    ifelse(x, trueval, falseval)
+  }
 }
 

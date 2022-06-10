@@ -18,7 +18,14 @@ to_string.character <- function(x, schema = list()) {
 }
 
 #' @export
-colclass_string <- function(schema = list()) {
+csv_colclass_string <- function(schema = list()) {
   "character"
+}
+
+#' @export
+csv_format_string <- function(x, schema = attr(x, "schema")) {
+  if (is.null(schema)) schema <- build_schema(x)
+  # For a character we don't have to do anything; we can write as is
+  x
 }
 

@@ -35,8 +35,8 @@ res <- to_string(character(0))
 expect_equal(res, character(0), attributes = FALSE)
 
 # =============================================================================
-# colclass
+# csv_colclass
 
-res <- colclass_string(list()) 
+res <- csv_colclass_string(list()) 
 expect_equal(res, "character")
 

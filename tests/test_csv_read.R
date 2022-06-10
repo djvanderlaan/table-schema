@@ -1,7 +1,7 @@
 library(tableschema)
 source("helpers.R")
 
-dta <- sread_csv("test.csv")
+dta <- csv_read("test.csv")
 expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
   attributes = FALSE)
 expect_equal(dta$integer1, c(1, -100, NA, 100, 0, 0),
@@ -15,7 +15,7 @@ expect_equal(dta$number2, c(1.2, -0.001, 1100, -11000.4, NA, 0),
 expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
   attributes = FALSE)
 
-dta <- sread_csv("test.csv", 
+dta <- csv_read("test.csv", 
   schema = "test.schema.json")
 expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
   attributes = FALSE)
@@ -30,7 +30,7 @@ expect_equal(dta$number2, c(1.2, -0.001, 1100, -11000.4, NA, 0),
 expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
   attributes = FALSE)
 
-dta <- sread_csv("test.csv", use_fread = TRUE, data.table = TRUE)
+dta <- csv_read("test.csv", use_fread = TRUE, data.table = TRUE)
 stopifnot(is(dta, "data.table"))
 expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
   attributes = FALSE)
@@ -45,7 +45,7 @@ expect_equal(dta$number2, c(1.2, -0.001, 1100, -11000.4, NA, 0),
 expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
   attributes = FALSE)
 
-dta <- sread_csv("test2.csv", 
+dta <- csv_read("test2.csv", 
   schema = "test.schema.json")
 expect_equal(dta$string1, character(0),
   attributes = FALSE)

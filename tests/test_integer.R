@@ -55,8 +55,8 @@ expect_error(res <- to_integer(c("foo", "10", "10", NA)))
 
 
 # =============================================================================
-# colclass
+# csv_colclass
 
-res <- colclass_integer(list()) 
+res <- csv_colclass_integer(list()) 
 expect_equal(res, "integer")
 

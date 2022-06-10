@@ -115,25 +115,25 @@ expect_warning(
 expect_equal(res, c(TRUE, TRUE, FALSE, NA, FALSE), attributes = FALSE)
 
 # =============================================================================
-# colclass
+# csv_colclass
 
-res <-colclass_boolean(list(trueValues = "True", falseValues = "False"))
+res <-csv_colclass_boolean(list(trueValues = "True", falseValues = "False"))
 expect_equal(res, "logical")
-res <-colclass_boolean(list(trueValues = "true", falseValues = "false"))
+res <-csv_colclass_boolean(list(trueValues = "true", falseValues = "false"))
 expect_equal(res, "logical")
-res <-colclass_boolean(list(trueValues = "TRUE", falseValues = "FALSE"))
+res <-csv_colclass_boolean(list(trueValues = "TRUE", falseValues = "FALSE"))
 expect_equal(res, "logical")
-res <-colclass_boolean(list(trueValues = "1", falseValues = "0"))
+res <-csv_colclass_boolean(list(trueValues = "1", falseValues = "0"))
 expect_equal(res, "integer")
-res <-colclass_boolean()
+res <-csv_colclass_boolean()
 expect_equal(res, "character")
-res <-colclass_boolean(list(trueValues = "TRUE", falseValues = "false"))
+res <-csv_colclass_boolean(list(trueValues = "TRUE", falseValues = "false"))
 expect_equal(res, "character")
-res <-colclass_boolean(list(trueValues = "TRUE"))
+res <-csv_colclass_boolean(list(trueValues = "TRUE"))
 expect_equal(res, "character")
-res <-colclass_boolean(list(falseValues = "FALSE"))
+res <-csv_colclass_boolean(list(falseValues = "FALSE"))
 expect_equal(res, "character")
-res <-colclass_boolean(list(trueValues = c("true", "TRUE"), falseValues = "FALSE"))
+res <-csv_colclass_boolean(list(trueValues = c("true", "TRUE"), falseValues = "FALSE"))
 expect_equal(res, "character")
 
 
