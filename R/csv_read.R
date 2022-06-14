@@ -5,7 +5,7 @@
 #' Read data from a CSV-file using table-schema
 #'
 #' @param filename the name of the CSV-file
-#' @param schem the name of the file containing the table-schema.
+#' @param schema the name of the file containing the table-schema.
 #' @param use_fread use the \code{\link[data.table]{fread}} function instead of
 #'   \code{\link[utils]{read.csv}} and return a \code{data.table}.
 #' @param ... additional arguments are passed on to \code{read.csv} or 

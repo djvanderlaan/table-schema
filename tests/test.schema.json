@@ -22,6 +22,9 @@
       "type" : "boolean",
       "trueValues" : ["TRUE"],
       "falseValues" : ["FALSE"]
+    }, {
+      "name" : "date1",
+      "type" : "date"
     }
   ]
 }
