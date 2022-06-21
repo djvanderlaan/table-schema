@@ -53,7 +53,11 @@ csv_format_number <- function(x, schema = attr(x, "schema")) {
   if (has_groupchar || has_decimalchar) {
     groupchar <- if (has_groupchar) schema$groupChar else ""
     decimalchar <- if (has_decimalchar) schema$decimalChar else "."
-    formatC(x, big.mark = groupchar, decimal.mark = decimalchar)
+    na <- is.na(x)
+    x <- formatC(x, big.mark = groupchar, decimal.mark = decimalchar, 
+     format = "fg", digits = 15, width = 1)
+    x[na] <- NA
+    x
   } else x
 }
 

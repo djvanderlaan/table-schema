@@ -39,7 +39,7 @@ csv_read <- function(filename,
       colClasses = colclasses, stringsAsFactors = FALSE, ...)
   } else {
     dta <- utils::read.csv(filename, colClasses = colclasses, 
-      stringsAsFactors = FALSE, ...)
+      stringsAsFactors = FALSE, na.strings = "", ...)
   }
   convert_using_schema(dta, schema)
 }

@@ -91,7 +91,7 @@ csv_format_boolean <- function(x, schema = attr(x, "schema")) {
     x
   } else {
     trueval <- utils::head(schema$trueValues, 1)
-    falseval <- utils::head(schema$trueValues, 1)
+    falseval <- utils::head(schema$falseValues, 1)
     # When x is not logical; we let ifelse handle that
     ifelse(x, trueval, falseval)
   }

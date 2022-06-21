@@ -1,7 +1,18 @@
 expect_equal <- function(x, y, attributes = TRUE) {
+  if (is.data.frame(x) && !attributes) 
+    return(expect_equal_data.frame(x, y, attributes))
   if (!attributes) attributes(x) <- NULL
   if (!attributes) attributes(y) <- NULL
   stopifnot(isTRUE(all.equal(x, y)))
+}
+
+expect_equal_data.frame <- function(x, y, attributes = TRUE) {
+  if (!attributes) {
+    expect_equal(class(x), class(y))
+    expect_equal(names(x), names(y))
+    for (col in names(x)) 
+      expect_equal(x[[col]], y[[col]], attributes = FALSE)
+  } else expect_equal(x, y, attributes)
 }
 
 expect_attribute <- function(x, name, value) {

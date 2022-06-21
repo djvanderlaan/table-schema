@@ -20,7 +20,7 @@ to_integer.integer <- function(x, schema = list()) {
 to_integer.numeric <- function(x, schema = list()) {
   schema <- complete_schema_integer(schema)
   # Need to check for rounding errors? Would round(x) be better? 
-  structure(round(x), schema = schema)
+  structure(as.integer(round(x)), schema = schema)
 }
 
 
