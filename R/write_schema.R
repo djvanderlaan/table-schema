@@ -17,12 +17,17 @@ write_schema <- function(schema, filename) {
   # Some fields should be stored as a vector even when they contain
   # only a single values; make sure that they are indeed stored as
   # a vector
+  # Withing the field meta
   nounbox_fields <- c("trueValues", "falseValues")
   schema$fields[] <- lapply(schema$fields, function(f, nounbox) {
     nounbox <- intersect(nounbox, names(f))
     for (n in nounbox) f[[n]] <- I(f[[n]])
     f
   }, nounbox = nounbox_fields)
+  # General within schema
+  nounbox <- c("missingValues")
+  to_nounbox <- intersect(nounbox, names(schema))
+  for (n in to_nounbox) schema[[n]] <- I(schema[[n]])
   # Write
   jsonlite::write_json(schema, filename, auto_unbox = TRUE)
 }

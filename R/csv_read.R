@@ -1,4 +1,3 @@
-# TODO: handle missing values using na.strings
 # TODO: handle ; separator  
 
 
@@ -31,15 +30,18 @@ csv_read <- function(filename,
   if (is.character(schema)) schema <- jsonlite::read_json(schema)
   # Determine how we need to read each of the columns
   colclasses <- sapply(schema$fields, csv_colclass)
+  # Missing values
+  nastrings <- if (!is.null(schema$missingValues)) schema$missingValues else ""
+  nastrings <- as.character(nastrings)
   # Read
   if (use_fread) {
     if (!requireNamespace("data.table")) stop("In order to use ", 
         "'use_fread=TRUE' the data.table package needs to be installed.")
-    dta <- data.table::fread(filename, 
-      colClasses = colclasses, stringsAsFactors = FALSE, na.strings = "", ...)
+    dta <- data.table::fread(filename, colClasses = colclasses, 
+      stringsAsFactors = FALSE, na.strings = nastrings, ...)
   } else {
     dta <- utils::read.csv(filename, colClasses = colclasses, 
-      stringsAsFactors = FALSE, na.strings = "", ...)
+      stringsAsFactors = FALSE, na.strings = nastrings, ...)
   }
   convert_using_schema(dta, schema)
 }

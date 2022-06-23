@@ -8,7 +8,10 @@
 #' 
 #' @export
 read_schema <- function(filename) {
-  jsonlite::read_json(filename, simplifyVector = TRUE, simplifyDataFrame = FALSE,
-    simplifyMatrix = FALSE)
+  schema <- jsonlite::read_json(filename, simplifyVector = TRUE, 
+    simplifyDataFrame = FALSE, simplifyMatrix = FALSE)
+  if (!is.null(schema$missingValues)) 
+    schema$missingValues <- as.character(schema$missingValues)
+  schema
 }
 

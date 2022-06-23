@@ -22,6 +22,7 @@ to_number.character <- function(x, schema = list()) {
   schema <- complete_schema_number(schema)
   # Consider "" as a NA
   na_values <- ""
+  na_values <- character(0)
   na <- x %in% na_values | is.na(x);
   if (!is.null(schema$groupChar)) 
     x <- gsub(schema$groupChar, "", x, fixed = TRUE)

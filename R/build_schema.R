@@ -98,12 +98,13 @@ build_schema.default <- function(x, name = NULL) {
 #' @export
 build_schema.data.frame <- function(x, name = NULL) {
   schema <- attr(x, "schema")
-  if (!is.null(schema)) schema <- list(name = name)
+  if (is.null(schema)) schema <- list(name = name)
   fields <- vector("list", ncol(x))
   for (i in seq_along(x)) {
     fields[[i]] <- build_schema(x[[i]], names(x)[i])
   }
   schema$fields <- fields
+  if (is.null(schema$missingValues)) schema$missingValues <- ""
   schema
 }
 
