@@ -2,7 +2,7 @@ library(tableschema)
 source("helpers.R")
 
 dta <- csv_read("test.csv")
-expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
+expect_equal(dta$string1, c("a", "b", "c", NA, "f", "g"), 
   attributes = FALSE)
 expect_equal(dta$integer1, c(1, -100, NA, 100, 0, 0),
   attributes = FALSE)
@@ -20,7 +20,7 @@ expect_equal(dta$date1, as.Date(c("2020-01-01", "2022-01-12", NA,
 
 dta <- csv_read("test.csv", 
   schema = "test.schema.json")
-expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
+expect_equal(dta$string1, c("a", "b", "c", NA, "f", "g"), 
   attributes = FALSE)
 expect_equal(dta$integer1, c(1, -100, NA, 100, 0, 0),
   attributes = FALSE)
@@ -38,7 +38,7 @@ expect_equal(dta$date1, as.Date(c("2020-01-01", "2022-01-12", NA,
 
 dta <- csv_read("test.csv", use_fread = TRUE, data.table = TRUE)
 stopifnot(is(dta, "data.table"))
-expect_equal(dta$string1, c("a", "b", "c", "", "f", "g"), 
+expect_equal(dta$string1, c("a", "b", "c", NA, "f", "g"), 
   attributes = FALSE)
 expect_equal(dta$integer1, c(1, -100, NA, 100, 0, 0),
   attributes = FALSE)

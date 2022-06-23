@@ -36,7 +36,7 @@ csv_read <- function(filename,
     if (!requireNamespace("data.table")) stop("In order to use ", 
         "'use_fread=TRUE' the data.table package needs to be installed.")
     dta <- data.table::fread(filename, 
-      colClasses = colclasses, stringsAsFactors = FALSE, ...)
+      colClasses = colclasses, stringsAsFactors = FALSE, na.strings = "", ...)
   } else {
     dta <- utils::read.csv(filename, colClasses = colclasses, 
       stringsAsFactors = FALSE, na.strings = "", ...)

@@ -1,7 +1,4 @@
 library(tableschema)
-
-library(devtools)
-load_all()
 source("helpers.R")
 
 dta <- data.frame(
@@ -45,7 +42,7 @@ expect_equal(dta, dta2, attributes = FALSE)
 # data.table
 csv_write(dta, fn, fn_schema)
 dta2 <- csv_read(fn, schema = fn_schema, use_fread = TRUE, data.table = TRUE)
-expect_equal(dta, dta2, attributes = FALSE)
+expect_equal(data.table::as.data.table(dta), dta2, attributes = FALSE)
 
 # ===
 # Empty dataset
