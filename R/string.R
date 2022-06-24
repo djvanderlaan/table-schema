@@ -1,10 +1,30 @@
 
+#' Add required fields to the schema for an string column
+#'
+#' @param schema should be a list.
+#'
+#' @return
+#' Returns \code{schema} with the required fields added. 
+#' 
 #' @export
 complete_schema_string <- function(schema) {
   if (!exists("type", schema)) schema[["type"]] <- "string"
   schema
 }
 
+#' Convert a vector to 'string' using the specified schema
+#' 
+#' @param x the vector to convert.
+#' @param schema the table-schema for the field.
+#'
+#' @details
+#' When \code{schema} is missing a default schema is generated using
+#' \code{\link{complete_schema_string}}. 
+#'
+#' @return
+#' Will return an \code{character} vector with \code{schema} added as the
+#' 'schema' attribute.
+#' 
 #' @export
 to_string <- function(x, schema = list()) {
   UseMethod("to_string")
@@ -17,11 +37,13 @@ to_string.character <- function(x, schema = list()) {
   structure(x, schema = schema)
 }
 
+#' @rdname csv_colclass
 #' @export
 csv_colclass_string <- function(schema = list()) {
   "character"
 }
 
+#' @rdname csv_format
 #' @export
 csv_format_string <- function(x, schema = attr(x, "schema")) {
   if (is.null(schema)) schema <- build_schema(x)

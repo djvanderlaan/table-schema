@@ -1,3 +1,12 @@
+#' What type to use when reading this column form a CSV-file
+#'
+#' @param schema the field schema
+#'
+#' @return 
+#' Returns a length one character vector with the name of the type
+#' \code{read.csv} or \code{fread} should use when reading the column.
+#'
+#' @rdname csv_colclass
 #' @export
 csv_colclass <- function(schema) {
   type <- schema$type

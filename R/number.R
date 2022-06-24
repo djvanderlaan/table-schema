@@ -1,4 +1,11 @@
 
+#' Add required fields to the schema for an number column
+#'
+#' @param schema should be a list.
+#'
+#' @return
+#' Returns \code{schema} with the required fields added. 
+#' 
 #' @export
 complete_schema_number <- function(schema) {
   if (!exists("type", schema)) schema[["type"]] <- "number"
@@ -6,6 +13,19 @@ complete_schema_number <- function(schema) {
   schema
 }
 
+#' Convert a vector to 'number' using the specified schema
+#' 
+#' @param x the vector to convert.
+#' @param schema the table-schema for the field.
+#'
+#' @details
+#' When \code{schema} is missing a default schema is generated using
+#' \code{\link{complete_schema_number}}. 
+#'
+#' @return
+#' Will return an \code{numeric} vector with \code{schema} added as the 'schema'
+#' attribute.
+#' 
 #' @export
 to_number <- function(x, schema = list()) {
   UseMethod("to_number")
@@ -34,6 +54,7 @@ to_number.character <- function(x, schema = list()) {
   structure(res, schema = schema)
 }
 
+#' @rdname csv_colclass
 #' @export
 csv_colclass_number <- function(schema = list()) {
   schema <- complete_schema_number(schema)
@@ -44,6 +65,7 @@ csv_colclass_number <- function(schema = list()) {
   }
 }
 
+#' @rdname csv_format
 #' @export
 csv_format_number <- function(x, schema = attr(x, "schema")) {
   if (is.null(schema)) schema <- build_schema(x)

@@ -1,4 +1,24 @@
 
+#' Convert columns of data.frame to their correct types using table schema
+#'
+#' @param dta a \code{data.frame} or \code{data.table}.
+#' @param schema an object with the table schema
+#'
+#' @details
+#' Converts each column in \code{dta} to the correct R-type using the type
+#' information in the schema. For example, if the original column type in
+#' \code{dta} is a character vector and the schema specifies that the field is
+#' of type number, the column is converted to numeric using the decimal
+#' separator and thousands separator specified in the schema (or default values
+#' for these if not). 
+#'
+#' @examples
+#' schema <- list(fields = list(
+#'   list(name = "field1", type = "number", decimalChar=",")
+#' ))
+#' dta <- data.frame(field1 = c("10,1", "-10,1"))
+#' convert_using_schema(dta, schema)
+#'
 #' @export
 convert_using_schema <- function(dta, schema) {
   # Check columnnames
