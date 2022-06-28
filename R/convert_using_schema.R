@@ -38,6 +38,8 @@ convert_using_schema <- function(dta, schema) {
       dta[[i]] <- fun(dta[[i]], schema$fields[[i]])
     }
   }
+  # The fields schema is stored in the fields; drop it
+  schema$fields <- NULL
   if (is_data_table) {
     data.table::setattr(dta, "schema", schema)
   } else {

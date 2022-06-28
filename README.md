@@ -5,7 +5,7 @@ TODO List
 -------------------------------------------------------------------------------
 
 - [x] CSV-writer
-- [ ] Documentation of functions
+- [x] Documentation of functions
 - [ ] Handle European CSV-format (';' and ',' vs ',' and '.') in `csv_read` and
   `csv_write`.
 - [x] Handle date columns
