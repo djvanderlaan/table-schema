@@ -1,3 +1,30 @@
+#' Generate field schema for a date field
+#'
+#' @param name name of the field
+#' @param description description of the field
+#' @param format the textual format with which the date is stored. Can be 
+#'   "default", a valid format as accepted by \code{\link{strptime}} or 
+#'   "any" (no specified format, in R this the date is passed on to
+#'   \code{\link{as.Date}}. 
+#' @param ... additional custom fields to add to the field schema.
+#'
+#' @return 
+#' A list with a least the fields "name" and "type".
+#'
+#' @examples
+#' x <- as.Date(c("2020-01-01", "2022-12-31"))
+#' schema(x) <- schema_date("importantday")
+#'
+#' @export
+schema_date <- function(name, description, format = "default", ...) {
+  res <- list(name = name, type = "date")
+  if (!missing(description) && !is.null(description)) 
+    res$description <- description
+  if (!missing(format) && !is.null(format)) 
+    res$format <- format
+  c(res, list(...))
+}
+
 #' Add required fields to the schema for a date column
 #'
 #' @param schema should be a list.

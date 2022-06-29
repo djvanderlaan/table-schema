@@ -1,3 +1,34 @@
+#' Generate field schema for a number field
+#'
+#' @param name name of the field
+#' @param description description of the field
+#' @param decimalChar character used to separate the decimal part of the 
+#'   number.
+#' @param groupChar character used to separate multiples of thousand in 
+#'   large numbers.
+#' @param ... additional custom fields to add to the field schema.
+#'
+#' @return 
+#' A list with a least the fields "name" and "type".
+#'
+#' @examples
+#' x <- c(10, 20.1)
+#' schema(x) <- schema_number("field", "A numeric field", 
+#'   decimalChar = ",")
+#'
+#' @export
+schema_number <- function(name, description = NULL, decimalChar = ".", 
+    groupChar = "", ...) {
+  res <- list(name = name, type = "number")
+  if (!missing(description) && !is.null(description)) 
+    res$description <- description
+  if (!missing(decimalChar)) 
+    res$decimalChar <- decimalChar
+  if (!missing(groupChar)) 
+    res$groupChar <- groupChar
+  c(res, list(...))
+}
+
 
 #' Add required fields to the schema for an number column
 #'

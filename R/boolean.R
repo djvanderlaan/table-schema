@@ -1,4 +1,35 @@
 
+#' Generate field schema for a boolean field
+#'
+#' @param name name of the field
+#' @param description description of the field
+#' @param trueValues a vector with strings that should be interpreted as
+#'  true values when representing the field as text.
+#' @param falseValues a vector with strings that should be interpreted as
+#'  false values when representing the field as text.
+#' @param ... additional custom fields to add to the field schema.
+#'
+#' @return 
+#' A list with a least the fields "name", "type", "trueValues" and
+#' "falseValues".
+#'
+#' @examples
+#' x <- 1:4 > 2
+#' schema(x) <- schema_boolean("field", "A logical field")
+#'
+#' @export
+schema_boolean <- function(name, description, 
+    trueValues = c("true", "TRUE", "True", "1"),
+    falseValues = c("false", "FALSE", "False", "0"),...) {
+  res <- list(name = name, type = "boolean")
+  if (!missing(description) && !is.null(description)) 
+    res$description <- description
+  res$trueValues <- trueValues
+  res$falseValues <- falseValues
+  c(res, list(...))
+}
+
+
 #' Add required fields to the schema for an boolean column
 #'
 #' @param schema should be a list.

@@ -1,4 +1,26 @@
 
+#' Generate field schema for an integer field
+#'
+#' @param name name of the field
+#' @param description description of the field
+#' @param ... additional custom fields to add to the field schema.
+#'
+#' @return 
+#' A list with a least the fields "name" and "type".
+#'
+#' @examples
+#' x <- 1:4
+#' schema(x) <- schema_integer("field", "A logical field")
+#'
+#' @export
+schema_integer <- function(name, description, ...) {
+  res <- list(name = name, type = "integer")
+  if (!missing(description) && !is.null(description)) 
+    res$description <- description
+  c(res, list(...))
+}
+
+
 #' Add required fields to the schema for an integer column
 #'
 #' @param schema should be a list.

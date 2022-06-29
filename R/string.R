@@ -1,3 +1,24 @@
+#' Generate field schema for a string field
+#'
+#' @param name name of the field
+#' @param description description of the field
+#' @param ... additional custom fields to add to the field schema.
+#'
+#' @return 
+#' A list with a least the fields "name" and "type".
+#'
+#' @examples
+#' x <- c("foo", "bar")
+#' schema(x) <- schema_string("field", "A text field")
+#'
+#' @export
+schema_string <- function(name, description, ...) {
+  res <- list(name = name, type = "string")
+  if (!missing(description) && !is.null(description)) 
+    res$description <- description
+  c(res, list(...))
+}
+
 
 #' Add required fields to the schema for an string column
 #'
