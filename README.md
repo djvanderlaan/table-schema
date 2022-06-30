@@ -9,6 +9,7 @@ TODO List
 - [ ] Handle European CSV-format (';' and ',' vs ',' and '.') in `csv_read` and
   `csv_write`.
 - [x] Handle date columns
+- [x] Let `csv_write` also write to stdout
 - [ ] Handle factor columns
 - [x] Specify missing values at file level 
 - [ ] Specify missing values at column level (not in standard)

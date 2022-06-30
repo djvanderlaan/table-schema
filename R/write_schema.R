@@ -2,6 +2,8 @@
 #'
 #' @param schema table-schema object
 #' @param filename file to write object to.
+#' @param pretty add identation to the JSON output
+#' @param ... passed on to \code{\link[jsonlite]{write_json}}.
 #'
 #' @details
 #' Object is stored as an JSON-file. This function tries to make sure that
@@ -13,7 +15,7 @@
 #' creating a file.
 #' 
 #' @export
-write_schema <- function(schema, filename) {
+write_schema <- function(schema, filename, pretty = TRUE, ...) {
   # Some fields should be stored as a vector even when they contain
   # only a single values; make sure that they are indeed stored as
   # a vector
@@ -29,6 +31,7 @@ write_schema <- function(schema, filename) {
   to_nounbox <- intersect(nounbox, names(schema))
   for (n in to_nounbox) schema[[n]] <- I(schema[[n]])
   # Write
-  jsonlite::write_json(schema, filename, auto_unbox = TRUE)
+  jsonlite::write_json(schema, filename, auto_unbox = TRUE, 
+    pretty = pretty, ...)
 }
 

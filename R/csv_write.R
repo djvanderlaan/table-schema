@@ -2,9 +2,11 @@
 #' Write data to CSV-file and the table schema to a JSON file
 #' 
 #' @param x the dataset to write to file. 
-#' @param filename the name of the CSV-file.
+#' @param filename the name of the CSV-file. If empty string the contents are
+#'   written to the console.
 #' @param schema the name fo the JSON-file to which the schema should be
-#'   written.
+#'   written. If missing and \code{filename} is an empty string the output is 
+#'   written to the console.
 #' @param ... ignored for now.
 #'
 #' @details
@@ -19,9 +21,10 @@
 #' unsupported types).
 #' 
 #' @export
-csv_write <- function(x, filename, 
+csv_write <- function(x, filename = "", 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
     ...) {
+  if (filename == "" && missing(schema)) schema = stdout()
   schema_df <- build_schema(x)
   # Keep track of the fields that were originally character field and should
   # be quoted in the output
@@ -38,6 +41,6 @@ csv_write <- function(x, filename,
   # Write
   utils::write.csv(x, file = filename, na = na, row.names = FALSE, 
     fileEncoding = "UTF-8", quote = quote)
-  write_schema(schema_df, schema)
+  write_schema(schema_df, schema, pretty = TRUE)
 }
 
