@@ -17,17 +17,37 @@
 #' of '.' and no thousand separator is read in as is. Other fields are generally
 #' read in as character and then converted to the correct R-type. 
 #'
+#' When \code{use_fread = FALSE}, \code{\link[utils]{read.csv}} is called. 
+#' Therefore, \code{filename} can also be other types of connections as 
+#' accepted by \code{read.csv} such as a \code{\link{textConnection}} for 
+#' direct input of CSV-data.
+#'
 #' @return
 #' Returns a \code{data.frame} (or \code{data.table} when 
 #' \code{use_fread = TRUE}). The schema is added in the \code{schema} attribute
 #' of the \code{data.frame} and the schema of the columns/fields is added to
 #' each of the columns. 
 #' 
+#' @examples
+#' csv <- "col1,col2
+#' 10*2,30-12-1971
+#' -10*2,01-01-2000"
+#' 
+#' json <- '{
+#'   "fields" : [
+#'     {"name": "col1", "type": "number", "decimalChar": "*"},
+#'     {"name": "col2", "type": "date", "format": "%d-%m-%Y"}
+#'   ]
+#' } '
+#' 
+#' csv_read(textConnection(csv), json)
+#' 
 #' @export
 csv_read <- function(filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
     use_fread = FALSE, ...) {
-  if (is.character(schema)) schema <- jsonlite::read_json(schema)
+  #if (is.character(schema)) schema <- jsonlite::read_json(schema)
+  if (is.character(schema)) schema <- read_schema(schema)
   # Determine how we need to read each of the columns
   colclasses <- sapply(schema$fields, csv_colclass)
   # Missing values
