@@ -51,6 +51,8 @@ complete_schema_boolean <- function(schema) {
 #' 
 #' @param x the vector to convert.
 #' @param schema the table-schema for the field.
+#' @param to_factor convert to factor if the schema has a categories
+#'   field. 
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -61,12 +63,12 @@ complete_schema_boolean <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_boolean <- function(x, schema = list()) {
+to_boolean <- function(x, schema = list(), to_factor = TRUE) {
   UseMethod("to_boolean")
 }
 
 #' @export
-to_boolean.integer <- function(x, schema = list()) {
+to_boolean.integer <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_boolean(schema)
   true_values <- suppressWarnings(as.integer(schema$trueValues))
   if (any(is.na(true_values))) 
@@ -80,7 +82,6 @@ to_boolean.integer <- function(x, schema = list()) {
     res <- as.logical(x)
     if (!all(x %in% c(false_values, true_values, NA))) 
       warning("Invalid trueValues in x.")
-    structure(res, schema = schema)
   } else {
     s1  <- x %in% true_values
     s0 <- x %in% false_values
@@ -89,12 +90,15 @@ to_boolean.integer <- function(x, schema = list()) {
     invalid <- !(s0 | s1 | is.na(x))
     if (any(invalid)) 
       stop("Invalid values found: '", x[utils::head(which(invalid), 1)], "'.")
-    structure(res, schema = schema)
   }
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    res <- to_factor(res, schema)
+  structure(res, schema = schema)
 }
 
 #' @export
-to_boolean.character <- function(x, schema = list()) {
+to_boolean.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_boolean(schema)
   # Unless "" is a true of false value we will consider it a missing value
   na_values <- setdiff("", c(schema$trueValues, schema$falseValues))
@@ -106,12 +110,18 @@ to_boolean.character <- function(x, schema = list()) {
   invalid <- !(s0 | s1 | is.na(x))
   if (any(invalid)) 
     stop("Invalid values found: '", x[utils::head(which(invalid), 1)], "'.")
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    res <- to_factor(res, schema)
   structure(res, schema = schema)
 }
 
 #' @export
-to_boolean.logical <- function(x, schema = list()) {
+to_boolean.logical <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_boolean(schema)
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    x <- to_factor(x, schema)
   structure(x, schema = schema)
 }
 

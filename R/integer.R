@@ -39,6 +39,8 @@ complete_schema_integer <- function(schema) {
 #' 
 #' @param x the vector to convert.
 #' @param schema the table-schema for the field.
+#' @param to_factor convert to factor if the schema has a categories
+#'   field. 
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -49,26 +51,33 @@ complete_schema_integer <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_integer <- function(x, schema = list()) {
+to_integer <- function(x, schema = list(), to_factor = TRUE) {
   UseMethod("to_integer")
 }
 
 #' @export
-to_integer.integer <- function(x, schema = list()) {
+to_integer.integer <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_integer(schema)
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    x <- to_factor(x, schema)
   structure(x, schema = schema)
 }
 
 #' @export
-to_integer.numeric <- function(x, schema = list()) {
+to_integer.numeric <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_integer(schema)
   # Need to check for rounding errors? Would round(x) be better? 
-  structure(as.integer(round(x)), schema = schema)
+  x <- as.integer(round(x))
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    x <- to_factor(x, schema)
+  structure(x, schema = schema)
 }
 
 
 #' @export
-to_integer.character <- function(x, schema = list()) {
+to_integer.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_integer(schema)
   # Consider "" as a NA
   na_values <- ""
@@ -77,6 +86,9 @@ to_integer.character <- function(x, schema = list()) {
   invalid <- is.na(res) & !na
   if (any(invalid)) 
     stop("Invalid values found: '", x[utils::head(which(invalid), 1)], "'.")
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    res <- to_factor(res, schema)
   structure(res, schema = schema)
 }
 

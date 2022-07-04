@@ -48,6 +48,8 @@ complete_schema_number <- function(schema) {
 #' 
 #' @param x the vector to convert.
 #' @param schema the table-schema for the field.
+#' @param to_factor convert to factor if the schema has a categories
+#'   field. 
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -58,18 +60,21 @@ complete_schema_number <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_number <- function(x, schema = list()) {
+to_number <- function(x, schema = list(), to_factor = TRUE) {
   UseMethod("to_number")
 }
 
 #' @export
-to_number.numeric <- function(x, schema = list()) {
+to_number.numeric <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_number(schema)
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    x <- to_factor(x, schema)
   structure(x, schema = schema)
 }
 
 #' @export
-to_number.character <- function(x, schema = list()) {
+to_number.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_number(schema)
   # Consider "" as a NA
   na_values <- ""
@@ -82,6 +87,9 @@ to_number.character <- function(x, schema = list()) {
   invalid <- is.na(res) & !na & !is.nan(res)
   if (any(invalid)) 
     stop("Invalid values found: '", x[utils::head(which(invalid), 1)], "'.")
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    res <- to_factor(res, schema)
   structure(res, schema = schema)
 }
 

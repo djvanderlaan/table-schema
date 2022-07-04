@@ -37,6 +37,8 @@ complete_schema_string <- function(schema) {
 #' 
 #' @param x the vector to convert.
 #' @param schema the table-schema for the field.
+#' @param to_factor convert to factor if the schema has a categories
+#'   field. 
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -47,14 +49,17 @@ complete_schema_string <- function(schema) {
 #' 'schema' attribute.
 #' 
 #' @export
-to_string <- function(x, schema = list()) {
+to_string <- function(x, schema = list(), to_factor = TRUE) {
   UseMethod("to_string")
 }
 
 #' @export
-to_string.character <- function(x, schema = list()) {
+to_string.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_string(schema)
   # Consider "" as a NA?
+  # Handle categories
+  if (to_factor && !is.null(schema$categories)) 
+    x <- to_factor(x, schema)
   structure(x, schema = schema)
 }
 
