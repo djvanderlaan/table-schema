@@ -3,6 +3,8 @@
 #'
 #' @param dta a \code{data.frame} or \code{data.table}.
 #' @param schema an object with the table schema
+#' @param to_factor convert columns to factor if the schema has a categories
+#'   field for the column.
 #'
 #' @details
 #' Converts each column in \code{dta} to the correct R-type using the type
@@ -20,7 +22,7 @@
 #' convert_using_schema(dta, schema)
 #'
 #' @export
-convert_using_schema <- function(dta, schema) {
+convert_using_schema <- function(dta, schema, to_factor = TRUE) {
   # Check columnnames
   colnames <- sapply(schema$fields, function(x) x$name)
   if (!all(names(dta) == colnames)) 
@@ -33,9 +35,10 @@ convert_using_schema <- function(dta, schema) {
     fun <- get(fun)
     col <- names(dta)[i]
     if (is_data_table) {
-      data.table::set(dta, j = col, value = fun(dta[[col]], schema$fields[[i]]))
+      data.table::set(dta, j = col, 
+        value = fun(dta[[col]], schema$fields[[i]], to_factor))
     } else {
-      dta[[i]] <- fun(dta[[i]], schema$fields[[i]])
+      dta[[i]] <- fun(dta[[i]], schema$fields[[i]], to_factor)
     }
   }
   # The fields schema is stored in the fields; drop it

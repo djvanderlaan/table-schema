@@ -7,6 +7,8 @@
 #' @param schema the name of the file containing the table-schema.
 #' @param use_fread use the \code{\link[data.table]{fread}} function instead of
 #'   \code{\link[utils]{read.csv}} and return a \code{data.table}.
+#' @param to_factor convert columns to factor if the schema has a categories
+#'   field for the column.
 #' @param ... additional arguments are passed on to \code{read.csv} or 
 #'   \code{fread}.
 #'
@@ -45,7 +47,7 @@
 #' @export
 csv_read <- function(filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
-    use_fread = FALSE, ...) {
+    use_fread = FALSE, to_factor = TRUE, ...) {
   #if (is.character(schema)) schema <- jsonlite::read_json(schema)
   if (is.character(schema)) schema <- read_schema(schema)
   # Determine how we need to read each of the columns
@@ -63,6 +65,6 @@ csv_read <- function(filename,
     dta <- utils::read.csv(filename, colClasses = colclasses, 
       stringsAsFactors = FALSE, na.strings = nastrings, ...)
   }
-  convert_using_schema(dta, schema)
+  convert_using_schema(dta, schema, to_factor = to_factor)
 }
 

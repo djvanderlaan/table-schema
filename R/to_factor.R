@@ -41,8 +41,9 @@ to_factor <- function(x, schema) {
   }
   levels <- sapply(schema$categories, function(x) x$name)
   labels <- sapply(schema$categories, function(x) x$title)
-  if (!all(x %in% levels)) {
-    wrong <- unique(x[!(x %in% levels)])
+  ok <- x %in% levels | is.na(x)
+  if (!all(ok)) {
+    wrong <- unique(x[!ok])
     wrong <- paste0("'", wrong, "'")
     if (length(wrong) > 5) 
       wrong <- c(utils::head(wrong, 5), "...")

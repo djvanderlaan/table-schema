@@ -17,9 +17,12 @@ expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
 expect_equal(dta$date1, as.Date(c("2020-01-01", "2022-01-12", NA, 
     "1950-10-10", "1920-12-10", "2002-02-20")),
   attributes = FALSE)
+expect_equal(dta$factor1, factor(c(1,2,1,3,NA,3), levels = 1:4,
+  labels = c("Female", "Male", "Other",  "Not given")), attributes = FALSE)
+expect_equal(levels(dta$factor1), c("Female", "Male", "Other",  "Not given"))
 
 dta <- csv_read("test.csv", 
-  schema = "test.schema.json")
+  schema = "test.schema.json", to_factor = FALSE)
 expect_equal(dta$string1, c("a", "b", "c", NA, "f", "g"), 
   attributes = FALSE)
 expect_equal(dta$integer1, c(1, -100, NA, 100, 0, 0),
@@ -35,6 +38,7 @@ expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
 expect_equal(dta$date1, as.Date(c("2020-01-01", "2022-01-12", NA, 
     "1950-10-10", "1920-12-10", "2002-02-20")),
   attributes = FALSE)
+expect_equal(dta$factor1, c(1,2,1,3,NA,3), attributes = FALSE)
 
 dta <- csv_read("test.csv", use_fread = TRUE, data.table = TRUE)
 stopifnot(is(dta, "data.table"))
@@ -53,6 +57,9 @@ expect_equal(dta$boolean2, c(TRUE, FALSE, TRUE, NA, FALSE, TRUE),
 expect_equal(dta$date1, as.Date(c("2020-01-01", "2022-01-12", NA, 
     "1950-10-10", "1920-12-10", "2002-02-20")),
   attributes = FALSE)
+expect_equal(dta$factor1, factor(c(1,2,1,3,NA,3), levels = 1:4,
+  labels = c("Female", "Male", "Other",  "Not given")), attributes = FALSE)
+expect_equal(levels(dta$factor1), c("Female", "Male", "Other",  "Not given"))
 
 dta <- csv_read("test2.csv", 
   schema = "test.schema.json")
@@ -70,4 +77,6 @@ expect_equal(dta$boolean2, logical(0),
   attributes = FALSE)
 expect_equal(dta$date1, as.Date(character(0)),
   attributes = FALSE)
-
+expect_equal(dta$factor1, factor(numeric(0), levels = 1:4,
+  labels = c("Female", "Male", "Other",  "Not given")), attributes = FALSE)
+expect_equal(levels(dta$factor1), c("Female", "Male", "Other",  "Not given"))
