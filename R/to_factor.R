@@ -53,3 +53,29 @@ to_factor <- function(x, schema) {
   structure(x, schema = schema)
 }
 
+
+#' @export
+csv_format_categorical <- function(x, schema = attr(x, "schema")) {
+  if (is.null(schema)) schema <- build_schema(x)
+  if (is.null(schema$categories)) stop("the categories element is missing ", 
+    "from the field schema: x is not a categorical field.")
+  # Convert the labels back to values
+  values <- sapply(schema$categories, function(x) x$name)
+  labels <- sapply(schema$categories, function(x) x$title)
+  if (is.factor(x)) {
+    m <- match(x, labels)
+    ok <- is.na(x) | !is.na(m)
+    x <- values[m]
+  } else {
+    # TODO: handle missing values?
+    ok <- x %in% values | is.na(x)
+  }
+  if (!all(ok)) {
+    wrong <- unique(x[!ok])
+    wrong <- paste0("'", wrong, "'")
+    if (length(wrong) > 5) 
+      wrong <- c(utils::head(wrong, 5), "...")
+    stop("Invalid values found in x: ", paste0(wrong, collapse = ","))
+  }
+  x
+}

@@ -2,17 +2,18 @@
 #'
 #' @param x the variable for which the meta data has to be generated.
 #' @param name the name of the variable.
+#' @param ... passed on to other methods.
 #' 
 #' @details
 #' When \code{x} has a 'schema' attribute, that is used. 
 #' 
 #' @export
-build_schema <- function(x, name = NULL) {
+build_schema <- function(x, name = NULL, ...) {
   UseMethod("build_schema")
 }
 
 #' @export
-build_schema.numeric <- function(x, name = NULL) {
+build_schema.numeric <- function(x, name = NULL, ...) {
   res <- attr(x, "schema")
   if (!is.null(res)) {
     if (!missing(name)) res[["name"]] <- name
@@ -26,7 +27,7 @@ build_schema.numeric <- function(x, name = NULL) {
 }
 
 #' @export
-build_schema.integer <- function(x, name = NULL) {
+build_schema.integer <- function(x, name = NULL, ...) {
   res <- attr(x, "schema")
   if (!is.null(res)) {
     if (!missing(name)) res[["name"]] <- name
@@ -40,7 +41,7 @@ build_schema.integer <- function(x, name = NULL) {
 }
 
 #' @export
-build_schema.logical <- function(x, name = NULL) {
+build_schema.logical <- function(x, name = NULL, ...) {
   res <- attr(x, "schema")
   if (!is.null(res)) {
     if (!missing(name)) res[["name"]] <- name
@@ -56,7 +57,7 @@ build_schema.logical <- function(x, name = NULL) {
 }
 
 #' @export
-build_schema.character <- function(x, name = NULL) {
+build_schema.character <- function(x, name = NULL, ...) {
   res <- attr(x, "schema")
   if (!is.null(res)) {
     if (!missing(name)) res[["name"]] <- name
@@ -70,7 +71,33 @@ build_schema.character <- function(x, name = NULL) {
 }
 
 #' @export
-build_schema.Date <- function(x, name = NULL) {
+build_schema.factor <- function(x, name = NULL, as_integer = TRUE, ...) {
+  res <- attr(x, "schema")
+  if (!is.null(res)) {
+    if (!missing(name) && !is.null(name)) res[["name"]] <- name
+    # TODO: check if categories matches the levels
+  } else if (as_integer) {
+    res <- list(
+      type = "integer"
+    )
+    if (!missing(name) && !is.null(name)) res[["name"]] <- name
+    res$categories <- lapply(seq_len(nlevels(x)), function(i, levels) {
+      list(name = i, title = levels[i])
+    }, levels = levels(x))
+  } else {
+    res <- list(
+      type = "character"
+    )
+    if (!missing(name) && !is.null(name)) res[["name"]] <- name
+    res$categories <- lapply(levels(x), function(x) {
+      list(name = x, title = x)
+    })
+  }
+  res
+}
+
+#' @export
+build_schema.Date <- function(x, name = NULL, ...) {
   res <- attr(x, "schema")
   if (!is.null(res)) {
     if (!missing(name)) res[["name"]] <- name
@@ -82,7 +109,7 @@ build_schema.Date <- function(x, name = NULL) {
 }
 
 #' @export
-build_schema.default <- function(x, name = NULL) {
+build_schema.default <- function(x, name = NULL, ...) {
   res <- attr(x, "schema")
   if (!is.null(res)) {
     if (!missing(name)) res[["name"]] <- name
@@ -96,7 +123,7 @@ build_schema.default <- function(x, name = NULL) {
 }
 
 #' @export
-build_schema.data.frame <- function(x, name = NULL) {
+build_schema.data.frame <- function(x, name = NULL, ...) {
   schema <- attr(x, "schema")
   if (is.null(schema)) schema <- list(name = name)
   fields <- vector("list", ncol(x))

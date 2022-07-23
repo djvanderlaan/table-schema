@@ -73,6 +73,11 @@ csv_colclass_string <- function(schema = list()) {
 #' @export
 csv_format_string <- function(x, schema = attr(x, "schema")) {
   if (is.null(schema)) schema <- build_schema(x)
+  if (!is.null(schema$categories)) {
+    # We are dealing with a categorical variable that is stored as 
+    # a string
+    x <- csv_format_categorical(x, schema)
+  }
   # For a character we don't have to do anything; we can write as is
   x
 }
