@@ -1,3 +1,7 @@
+# categorical is not a separate field type in table schema. Instead, for each
+# regular type it is possible to have a categories field. This defines a fixes
+# set of valid values for the type and assigns each value a label. 
+
 
 # Convert field to factor based on schema
 # 
@@ -60,6 +64,7 @@ csv_format_categorical <- function(x, schema = attr(x, "schema")) {
   # Convert the labels back to values
   values <- sapply(schema$categories, function(x) x$name)
   labels <- sapply(schema$categories, function(x) x$title)
+  # TODO: handle case when title or name fields are missing
   if (is.factor(x)) {
     m <- match(x, labels)
     ok <- is.na(x) | !is.na(m)
