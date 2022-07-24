@@ -29,10 +29,10 @@
       "name" : "factor1",
       "type" : "integer",
       "categories" : [
-        {"name": 1, "title": "Female"},
-        {"name": 2, "title": "Male"},
-        {"name": 3, "title": "Other"},
-        {"name": 0, "title": "Not given"}
+        {"value": 1, "label": "Female"},
+        {"value": 2, "label": "Male"},
+        {"value": 3, "label": "Other"},
+        {"value": 0, "label": "Not given"}
       ]
     }
   ]

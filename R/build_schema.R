@@ -82,7 +82,7 @@ build_schema.factor <- function(x, name = NULL, as_integer = TRUE, ...) {
     )
     if (!missing(name) && !is.null(name)) res[["name"]] <- name
     res$categories <- lapply(seq_len(nlevels(x)), function(i, levels) {
-      list(name = i, title = levels[i])
+      list(value = i, label = levels[i])
     }, levels = levels(x))
   } else {
     res <- list(
@@ -90,7 +90,7 @@ build_schema.factor <- function(x, name = NULL, as_integer = TRUE, ...) {
     )
     if (!missing(name) && !is.null(name)) res[["name"]] <- name
     res$categories <- lapply(levels(x), function(x) {
-      list(name = x, title = x)
+      list(value = x, label = x)
     })
   }
   res

@@ -11,16 +11,16 @@
 # @details
 # The information on levels is contained in the 'categories' field of the
 # field schema. This should be a vector with objects with the fields
-# 'name' and 'title'. 'name' is the value of the field in the vector and 
-# 'title' is name name of the level. 
+# 'value' and 'label'. 'value' is the value of the field in the vector and 
+# 'label' is name of the level. 
 #
 # @examples
 # schema <- list(
 #   name = "field1",
 #   type = "string",
 #   categories = list(
-#     list(name = "M", title= "Male"),
-#     list(name = "F", title= "Female")
+#     list(value = "M", label = "Male"),
+#     list(value = "F", label = "Female")
 #   )
 # )
 # to_factor(c("F", "M", "F"), schema)
@@ -29,10 +29,10 @@
 #   name = "field2",
 #   type = "integer",
 #   categories = list(
-#     list(name = 0, title= "North"),
-#     list(name = 1, title= "South"),
-#     list(name = 2, title= "East"),
-#     list(name = 3, title= "West")
+#     list(value = 0, label = "North"),
+#     list(value = 1, label = "South"),
+#     list(value = 2, label = "East"),
+#     list(value = 3, label = "West")
 #   )
 # )
 # to_factor(1:3, schema)
@@ -42,8 +42,8 @@ to_factor <- function(x, schema) {
     warning("Schema does not have categories. Returning original vector.")
     return(x)
   }
-  levels <- sapply(schema$categories, function(x) x$name)
-  labels <- sapply(schema$categories, function(x) x$title)
+  levels <- sapply(schema$categories, function(x) x$value)
+  labels <- sapply(schema$categories, function(x) x$label)
   ok <- x %in% levels | is.na(x)
   if (!all(ok)) {
     wrong <- unique(x[!ok])
@@ -62,9 +62,9 @@ csv_format_categorical <- function(x, schema = attr(x, "schema")) {
   if (is.null(schema$categories)) stop("the categories element is missing ", 
     "from the field schema: x is not a categorical field.")
   # Convert the labels back to values
-  values <- sapply(schema$categories, function(x) x$name)
-  labels <- sapply(schema$categories, function(x) x$title)
-  # TODO: handle case when title or name fields are missing
+  values <- sapply(schema$categories, function(x) x$value)
+  labels <- sapply(schema$categories, function(x) x$label)
+  # TODO: handle case when label or value fields are missing
   if (is.factor(x)) {
     m <- match(x, labels)
     ok <- is.na(x) | !is.na(m)
