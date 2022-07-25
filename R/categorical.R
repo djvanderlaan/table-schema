@@ -38,13 +38,12 @@
 # to_factor(1:3, schema)
 #
 to_factor <- function(x, schema) {
-  if (is.null(schema$categories)) {
+  categories <- get_categories(schema)
+  if (is.null(categories)) {
     warning("Schema does not have categories. Returning original vector.")
     return(x)
   }
-  levels <- sapply(schema$categories, function(x) x$value)
-  labels <- sapply(schema$categories, function(x) x$label)
-  ok <- x %in% levels | is.na(x)
+  ok <- x %in% categories$values | is.na(x)
   if (!all(ok)) {
     wrong <- unique(x[!ok])
     wrong <- paste0("'", wrong, "'")
@@ -52,26 +51,25 @@ to_factor <- function(x, schema) {
       wrong <- c(utils::head(wrong, 5), "...")
     stop("Invalid values found in x: ", paste0(wrong, collapse = ","))
   }
-  x <- factor(x, levels = levels, labels = labels)
+  x <- factor(x, levels = categories$values, labels = categories$labels)
   structure(x, schema = schema)
 }
 
 
 csv_format_categorical <- function(x, schema = attr(x, "schema")) {
   if (is.null(schema)) schema <- build_schema(x)
-  if (is.null(schema$categories)) stop("the categories element is missing ", 
+  categories <- get_categories(schema)
+  if (is.null(categories)) stop("the categories element is missing ", 
     "from the field schema: x is not a categorical field.")
   # Convert the labels back to values
-  values <- sapply(schema$categories, function(x) x$value)
-  labels <- sapply(schema$categories, function(x) x$label)
   # TODO: handle case when label or value fields are missing
   if (is.factor(x)) {
-    m <- match(x, labels)
+    m <- match(x, categories$labels)
     ok <- is.na(x) | !is.na(m)
-    x <- values[m]
+    x <- categories$values[m]
   } else {
     # TODO: handle missing values?
-    ok <- x %in% values | is.na(x)
+    ok <- x %in% categories$values | is.na(x)
   }
   if (!all(ok)) {
     wrong <- unique(x[!ok])
@@ -82,3 +80,15 @@ csv_format_categorical <- function(x, schema = attr(x, "schema")) {
   }
   x
 }
+
+
+
+get_categories <- function(schema) {
+  if (is.null(schema$categories)) return(NULL)
+  values <- sapply(schema$categories, function(x) x$value)
+  labels <- sapply(schema$categories, function(x) {
+    ifelse(is.null(x$label), x$value, x$label)
+  })
+  data.frame(values = values, labels = labels)
+}
+

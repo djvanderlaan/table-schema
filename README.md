@@ -1,6 +1,5 @@
 
 
-
 Categorical fields
 -------------------------------------------------------------------------------
 
@@ -17,12 +16,12 @@ to the field schema as in the example below:
 {
   "name": "marstat",
   "title": "Marital status",
-  "type" : "integer",
-  "categories" : [
-    {"value" = 1, label = "Unmarried"},
-    {"value" = 2, label = "Married"},
-    {"value" = 3, label = "Divorced"},
-    {"value" = 4, label = "Widowed"}
+  "type": "integer",
+  "categories": [
+    {"value": 1, "label": "Unmarried"},
+    {"value": 2, "label": "Married"},
+    {"value": 3, "label": "Divorced"},
+    {"value": 4, "label": "Widowed"}
   ]
 }
 ```
@@ -48,4 +47,5 @@ TODO List
 - [ ] Specify categorical levels that can be considered as missing value.
 - [ ] fst reader and writer (separate package?)
 - [ ] feather reader and writer (separate package?)
+- [ ] Allow categories field to be a pointer to a file.
 
