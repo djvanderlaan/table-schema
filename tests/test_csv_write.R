@@ -6,7 +6,8 @@ dta <- data.frame(
     boolean = c(TRUE, FALSE, TRUE, NA, TRUE), 
     integer = c(NA, -100, 1150000, 1, 0),
     string = c("jan", "pier", NA, "joris", "corneel"),
-    date = as.Date(c("2022-01-01", "1950-10-10", NA, "1920-12-31", "2001-10-20"))
+    date = as.Date(c("2022-01-01", "1950-10-10", NA, "1920-12-31", "2001-10-20")),
+    factor = factor(c(2,1,1,NA,2), levels = 1:2, labels = c("B", "A"))
   )
 
 fn <- tempfile()

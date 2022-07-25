@@ -42,9 +42,10 @@ TODO List
   `csv_write`.
 - [x] Handle date columns
 - [x] Let `csv_write` also write to stdout
-- [ ] Handle factor columns
+- [x] Handle factor columns
 - [x] Specify missing values at file level 
 - [ ] Specify missing values at column level (not in standard)
+- [ ] Specify categorical levels that can be considered as missing value.
 - [ ] fst reader and writer (separate package?)
 - [ ] feather reader and writer (separate package?)
 
