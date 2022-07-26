@@ -27,9 +27,9 @@ to the field schema as in the example below:
 ```
 
 Each element in the `categories` field should be an object with a `value` and 
-`label` field. The `value` field should be of the same type as the field 
-(integer in this case); the `label` field should be a string. 
-
+optionally a `label` field. The `value` field should be of the same type as the
+field (integer in this case); the `label` field should be a string. Whe `label` 
+is missing, `value` is used as the label.
 
 
 TODO List
@@ -38,15 +38,15 @@ TODO List
 - [x] CSV-writer
 - [x] Documentation of functions
 - [ ] Handle European CSV-format (';' and ',' vs ',' and '.') in `csv_read` and
-  `csv_write`.
+      `csv_write`.
 - [x] Handle date columns
 - [x] Let `csv_write` also write to stdout
 - [x] Handle factor columns
 - [x] Specify missing values at file level 
-- [ ] Specify missing values at column level (not in standard)
+- [x] Specify missing values at column level (not in standard)
+- [ ] Load categories from external source
 - [ ] Specify categorical levels that can be considered as missing value.
-- [ ] fst reader and writer (separate package?)
-- [ ] feather reader and writer (separate package?)
 - [ ] Allow categories field to be a pointer to a file.
-- [ ] Reader and writers for other file types than csv (separate package?)
+- [ ] Reader and writers for other file types (fst, feather, parquet) 
+      than csv (separate package?)
 
