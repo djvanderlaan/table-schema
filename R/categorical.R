@@ -43,7 +43,7 @@ to_factor <- function(x, schema) {
     warning("Schema does not have categories. Returning original vector.")
     return(x)
   }
-  ok <- x %in% categories$values | is.na(x)
+  ok <- x %in% categories$value | is.na(x)
   if (!all(ok)) {
     wrong <- unique(x[!ok])
     wrong <- paste0("'", wrong, "'")
@@ -51,7 +51,7 @@ to_factor <- function(x, schema) {
       wrong <- c(utils::head(wrong, 5), "...")
     stop("Invalid values found in x: ", paste0(wrong, collapse = ","))
   }
-  x <- factor(x, levels = categories$values, labels = categories$labels)
+  x <- factor(x, levels = categories$value, labels = categories$label)
   structure(x, schema = schema)
 }
 
@@ -64,12 +64,12 @@ csv_format_categorical <- function(x, schema = attr(x, "schema")) {
   # Convert the labels back to values
   # TODO: handle case when label or value fields are missing
   if (is.factor(x)) {
-    m <- match(x, categories$labels)
+    m <- match(x, categories$label)
     ok <- is.na(x) | !is.na(m)
-    x <- categories$values[m]
+    x <- categories$value[m]
   } else {
     # TODO: handle missing values?
-    ok <- x %in% categories$values | is.na(x)
+    ok <- x %in% categories$value | is.na(x)
   }
   if (!all(ok)) {
     wrong <- unique(x[!ok])
@@ -85,10 +85,10 @@ csv_format_categorical <- function(x, schema = attr(x, "schema")) {
 
 get_categories <- function(schema) {
   if (is.null(schema$categories)) return(NULL)
-  values <- sapply(schema$categories, function(x) x$value)
-  labels <- sapply(schema$categories, function(x) {
+  value <- sapply(schema$categories, function(x) x$value)
+  label <- sapply(schema$categories, function(x) {
     ifelse(is.null(x$label), x$value, x$label)
   })
-  data.frame(values = values, labels = labels)
+  data.frame(value = value, label = label)
 }
 
