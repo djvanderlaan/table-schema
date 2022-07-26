@@ -53,6 +53,7 @@ complete_schema_boolean <- function(schema) {
 #' @param schema the table-schema for the field.
 #' @param to_factor convert to factor if the schema has a categories
 #'   field. 
+#' @param ... passed on to other methods.
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -63,12 +64,12 @@ complete_schema_boolean <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_boolean <- function(x, schema = list(), to_factor = TRUE) {
+to_boolean <- function(x, schema = list(), to_factor = TRUE, ...) {
   UseMethod("to_boolean")
 }
 
 #' @export
-to_boolean.integer <- function(x, schema = list(), to_factor = TRUE) {
+to_boolean.integer <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_boolean(schema)
   true_values <- suppressWarnings(as.integer(schema$trueValues))
   if (any(is.na(true_values))) 
@@ -98,7 +99,7 @@ to_boolean.integer <- function(x, schema = list(), to_factor = TRUE) {
 }
 
 #' @export
-to_boolean.character <- function(x, schema = list(), to_factor = TRUE) {
+to_boolean.character <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_boolean(schema)
   # Unless "" is a true of false value we will consider it a missing value
   na_values <- if (!is.null(schema$missingValues)) schema$missingValues else 
@@ -118,7 +119,7 @@ to_boolean.character <- function(x, schema = list(), to_factor = TRUE) {
 }
 
 #' @export
-to_boolean.logical <- function(x, schema = list(), to_factor = TRUE) {
+to_boolean.logical <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_boolean(schema)
   # Handle categories
   if (to_factor && !is.null(schema$categories)) 

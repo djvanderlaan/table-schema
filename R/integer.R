@@ -41,6 +41,7 @@ complete_schema_integer <- function(schema) {
 #' @param schema the table-schema for the field.
 #' @param to_factor convert to factor if the schema has a categories
 #'   field. 
+#' @param ... passed on to other methods.
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -51,12 +52,12 @@ complete_schema_integer <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_integer <- function(x, schema = list(), to_factor = TRUE) {
+to_integer <- function(x, schema = list(), to_factor = TRUE, ...) {
   UseMethod("to_integer")
 }
 
 #' @export
-to_integer.integer <- function(x, schema = list(), to_factor = TRUE) {
+to_integer.integer <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_integer(schema)
   # Handle categories
   if (to_factor && !is.null(schema$categories)) 
@@ -65,7 +66,7 @@ to_integer.integer <- function(x, schema = list(), to_factor = TRUE) {
 }
 
 #' @export
-to_integer.numeric <- function(x, schema = list(), to_factor = TRUE) {
+to_integer.numeric <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_integer(schema)
   # Need to check for rounding errors? Would round(x) be better? 
   x <- as.integer(round(x))
@@ -77,7 +78,7 @@ to_integer.numeric <- function(x, schema = list(), to_factor = TRUE) {
 
 
 #' @export
-to_integer.character <- function(x, schema = list(), to_factor = TRUE) {
+to_integer.character <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_integer(schema)
   # Consider "" as a NA
   na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""

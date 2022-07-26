@@ -110,6 +110,10 @@ res <- to_number(c("10","--", "11", NA), schema)
 expect_equal(res, c(10, NA, 11, NA), attributes = FALSE)
 expect_error(res <- to_number(c("10","---", "11", NA), schema))
 
+# decimalChar argument
+res <- to_number(c("10,20", "", NA), decimalChar = ",")
+expect_equal(res, c(10.2, NA, NA), attributes = FALSE)
+
 # =============================================================================
 # csv_colclass
 

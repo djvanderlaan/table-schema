@@ -44,6 +44,7 @@ complete_schema_date <- function(schema) {
 #' @param schema the table-schema for the field.
 #' @param to_factor convert to factor if the schema has a categories
 #'   field. 
+#' @param ... passed on to other methods.
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -54,12 +55,12 @@ complete_schema_date <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_date <- function(x, schema = list(), to_factor = TRUE) {
+to_date <- function(x, schema = list(), to_factor = TRUE, ...) {
   UseMethod("to_date")
 }
 
 ##' @export
-to_date.integer <- function(x, schema = list(), to_factor = TRUE) {
+to_date.integer <- function(x, schema = list(), to_factor = TRUE, ...) {
   # When we get an integer or numeric; assume date was accidentally read as 
   # numeric, e.g. when date = 20200101 or 01012020-> convert to character and 
   # convert
@@ -67,7 +68,7 @@ to_date.integer <- function(x, schema = list(), to_factor = TRUE) {
 }
 
 ##' @export
-to_date.numeric <- function(x, schema = list(), to_factor = TRUE) {
+to_date.numeric <- function(x, schema = list(), to_factor = TRUE, ...) {
   # When we get an integer or numeric; assume date was accidentally read as 
   # numeric, e.g. when date = 20200101 or 01012020-> convert to character and 
   # convert
@@ -76,7 +77,7 @@ to_date.numeric <- function(x, schema = list(), to_factor = TRUE) {
 
 
 #' @export
-to_date.character <- function(x, schema = list(), to_factor = TRUE) {
+to_date.character <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_date(schema)
   # Consider "" as a NA
   na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""

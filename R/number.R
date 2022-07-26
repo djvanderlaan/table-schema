@@ -33,14 +33,16 @@ schema_number <- function(name, description = NULL, decimalChar = ".",
 #' Add required fields to the schema for an number column
 #'
 #' @param schema should be a list.
+#' @param decimalChar character used to separate the decimal part of the 
+#'   number.
 #'
 #' @return
 #' Returns \code{schema} with the required fields added. 
 #' 
 #' @export
-complete_schema_number <- function(schema) {
+complete_schema_number <- function(schema, decimalChar = ".") {
   if (!exists("type", schema)) schema[["type"]] <- "number"
-  if (!exists("decimalChar", schema)) schema[["decimalChar"]] <- "."
+  if (!exists("decimalChar", schema)) schema[["decimalChar"]] <- decimalChar
   schema
 }
 
@@ -50,6 +52,7 @@ complete_schema_number <- function(schema) {
 #' @param schema the table-schema for the field.
 #' @param to_factor convert to factor if the schema has a categories
 #'   field. 
+#' @param ... passed on to other methods.
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -60,13 +63,15 @@ complete_schema_number <- function(schema) {
 #' attribute.
 #' 
 #' @export
-to_number <- function(x, schema = list(), to_factor = TRUE) {
+to_number <- function(x, schema = list(), to_factor = TRUE, 
+    decimalChar = ".", ...) {
   UseMethod("to_number")
 }
 
 #' @export
-to_number.numeric <- function(x, schema = list(), to_factor = TRUE) {
-  schema <- complete_schema_number(schema)
+to_number.numeric <- function(x, schema = list(), to_factor = TRUE, 
+    decimalChar = ".", ...) {
+  schema <- complete_schema_number(schema, decimalChar = decimalChar)
   # Handle categories
   if (to_factor && !is.null(schema$categories)) 
     x <- to_factor(x, schema)
@@ -74,8 +79,9 @@ to_number.numeric <- function(x, schema = list(), to_factor = TRUE) {
 }
 
 #' @export
-to_number.character <- function(x, schema = list(), to_factor = TRUE) {
-  schema <- complete_schema_number(schema)
+to_number.character <- function(x, schema = list(), to_factor = TRUE, 
+    decimalChar = ".", ...) {
+  schema <- complete_schema_number(schema, decimalChar = decimalChar)
   # Consider "" as a NA
   na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""
   na <- x %in% na_values | is.na(x);
