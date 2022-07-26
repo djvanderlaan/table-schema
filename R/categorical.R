@@ -89,6 +89,16 @@ get_categories <- function(schema) {
   label <- sapply(schema$categories, function(x) {
     ifelse(is.null(x$label), x$value, x$label)
   })
-  data.frame(value = value, label = label)
+  res <- data.frame(value = value, label = label)
+  # Get additional fields from the categories and add those to the data.frame
+  additional_cols <- unique(unlist(lapply(schema$categories, names)))
+  additional_cols <- setdiff(additional_cols, c("value", "label"))
+  for (col in additional_cols) {
+    res[[col]] <- sapply(schema$categories, function(x) {
+      ifelse(is.null(x[[col]]), NA, x[[col]])
+    })
+  }
+  res
 }
+
 
