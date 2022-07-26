@@ -5,6 +5,8 @@
 #'
 #' @param filename the name of the CSV-file
 #' @param schema the name of the file containing the table-schema.
+#' @param delimiter the field separator character. See the \code{sep} argument
+#'   of \code{\link[utils]{read.csv}} and \code{\link[data.table]{fread}}.
 #' @param use_fread use the \code{\link[data.table]{fread}} function instead of
 #'   \code{\link[utils]{read.csv}} and return a \code{data.table}.
 #' @param to_factor convert columns to factor if the schema has a categories
@@ -47,6 +49,7 @@
 #' @export
 csv_read <- function(filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
+    delimiter = ",", 
     use_fread = FALSE, to_factor = TRUE, ...) {
   if (is.character(schema)) schema <- read_schema(schema)
   # Determine how we need to read each of the columns
@@ -59,10 +62,10 @@ csv_read <- function(filename,
     if (!requireNamespace("data.table")) stop("In order to use ", 
         "'use_fread=TRUE' the data.table package needs to be installed.")
     dta <- data.table::fread(filename, colClasses = colclasses, 
-      stringsAsFactors = FALSE, na.strings = nastrings, ...)
+      stringsAsFactors = FALSE, na.strings = nastrings, sep = delimiter, ...)
   } else {
     dta <- utils::read.csv(filename, colClasses = colclasses, 
-      stringsAsFactors = FALSE, na.strings = nastrings, ...)
+      stringsAsFactors = FALSE, na.strings = nastrings, sep = delimiter, ...)
   }
   convert_using_schema(dta, schema, to_factor = to_factor)
 }

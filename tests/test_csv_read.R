@@ -80,3 +80,17 @@ expect_equal(dta$date1, as.Date(character(0)),
 expect_equal(dta$factor1, factor(numeric(0), levels = 1:4,
   labels = c("Female", "Male", "Other",  "Not given")), attributes = FALSE)
 expect_equal(levels(dta$factor1), c("Female", "Male", "Other",  "Not given"))
+
+# === ; separator
+txt <- "col1;col2\n102;20"
+schema <- list(fields=list(
+    list(name="col1",type="integer"), 
+    list(name="col2",type="integer")
+  ))
+dta <- csv_read(textConnection(txt), delimiter = ";", schema = schema)
+expect_equal(dta$col1, 102L, attributes = FALSE)
+expect_equal(dta$col2, 20L, attributes = FALSE)
+dta <- csv_read(txt, delimiter = ";", schema = schema, use_fread = TRUE)
+expect_equal(dta$col1, 102L, attributes = FALSE)
+expect_equal(dta$col2, 20L, attributes = FALSE)
+
