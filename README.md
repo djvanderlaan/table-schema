@@ -48,4 +48,5 @@ TODO List
 - [ ] fst reader and writer (separate package?)
 - [ ] feather reader and writer (separate package?)
 - [ ] Allow categories field to be a pointer to a file.
+- [ ] Reader and writers for other file types than csv (separate package?)
 

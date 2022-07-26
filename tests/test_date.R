@@ -69,9 +69,20 @@ expect_error(
   to_date(c("20200101", "20221231", "", NA), schema = schema)
 )
 
+# === NA
+schema <- list(
+  name = "date",
+  missingValues = c("--")
+)
+res <- to_date(c("2020-01-01","--", "2022-12-31", NA), schema)
+expect_equal(res, as.Date(c("2020-01-01", NA, "2022-12-31", NA)), attributes = FALSE)
+expect_error(res <- to_date(c("2020-01-01","---", "2022-12-31", NA), schema))
+
 # =============================================================================
 # csv_colclass
 res <- csv_colclass_date(list()) 
+expect_equal(res, "character")
+res <- csv_colclass_date(list(missingValues = "--")) 
 expect_equal(res, "character")
 
 # =============================================================================

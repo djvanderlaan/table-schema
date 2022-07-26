@@ -56,7 +56,10 @@ to_string <- function(x, schema = list(), to_factor = TRUE) {
 #' @export
 to_string.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_string(schema)
-  # Consider "" as a NA?
+  # Handle missing values
+  na_values <- if (!is.null(schema$missingValues)) schema$missingValues else
+    character(0)
+  x[x %in% na_values] <- NA
   # Handle categories
   if (to_factor && !is.null(schema$categories)) 
     x <- to_factor(x, schema)

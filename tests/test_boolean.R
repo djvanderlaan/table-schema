@@ -114,6 +114,15 @@ expect_warning(
 )
 expect_equal(res, c(TRUE, TRUE, FALSE, NA, FALSE), attributes = FALSE)
 
+# === NA
+schema <- list(
+  name = "boolean",
+  missingValues = c("--")
+)
+res <- to_boolean(c("TRUE","--", "FALSE", NA), schema)
+expect_equal(res, c(TRUE, NA, FALSE, NA), attributes = FALSE)
+expect_error(res <- to_boolean(c("TRUE","---", "FALSE", NA), schema))
+
 # =============================================================================
 # csv_colclass
 
@@ -135,5 +144,6 @@ res <-csv_colclass_boolean(list(falseValues = "FALSE"))
 expect_equal(res, "character")
 res <-csv_colclass_boolean(list(trueValues = c("true", "TRUE"), falseValues = "FALSE"))
 expect_equal(res, "character")
-
+res <-csv_colclass_boolean(list(missingValues = c("--")))
+expect_equal(res, "character")
 

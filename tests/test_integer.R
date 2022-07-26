@@ -52,7 +52,14 @@ expect_equal(res, integer(0), attributes = FALSE)
 # === Invalid characters
 expect_error(res <- to_integer(c("foo", "10", "10", NA)))
 
-
+# === NA
+schema <- list(
+  name = "integer",
+  missingValues = c("--")
+)
+res <- to_integer(c("10","--", "11", NA), schema)
+expect_equal(res, c(10, NA, 11, NA), attributes = FALSE)
+expect_error(res <- to_integer(c("10","---", "11", NA), schema))
 
 # =============================================================================
 # csv_colclass
@@ -60,3 +67,10 @@ expect_error(res <- to_integer(c("foo", "10", "10", NA)))
 res <- csv_colclass_integer(list()) 
 expect_equal(res, "integer")
 
+# === NA
+schema <- list(
+  name = "integer",
+  missingValues = c("--")
+)
+res <- csv_colclass_integer(schema)
+expect_equal(res, "character")

@@ -79,7 +79,8 @@ to_date.numeric <- function(x, schema = list(), to_factor = TRUE) {
 to_date.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_date(schema)
   # Consider "" as a NA
-  x[x == ""] <- NA
+  na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""
+  x[x %in% na_values] <- NA
   na <- is.na(x);
   if (is.null(schema$format) || schema$format == "default") {
     res <- as.Date(x, format = "%Y-%m-%d")

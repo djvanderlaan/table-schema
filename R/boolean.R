@@ -101,10 +101,11 @@ to_boolean.integer <- function(x, schema = list(), to_factor = TRUE) {
 to_boolean.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_boolean(schema)
   # Unless "" is a true of false value we will consider it a missing value
-  na_values <- setdiff("", c(schema$trueValues, schema$falseValues))
+  na_values <- if (!is.null(schema$missingValues)) schema$missingValues else 
+    setdiff("", c(schema$trueValues, schema$falseValues))
   if (length(na_values)) x[x %in% na_values] <- NA
   s1  <- x %in% schema$trueValues
-  s0 <- x %in% schema$falseValues
+  s0  <- x %in% schema$falseValues
   res <- ifelse(s1, TRUE, NA)
   res[s0] <- FALSE
   invalid <- !(s0 | s1 | is.na(x))
@@ -130,7 +131,8 @@ to_boolean.logical <- function(x, schema = list(), to_factor = TRUE) {
 csv_colclass_boolean <- function(schema = list()) {
   schema <- complete_schema_boolean(schema)
   res <- "character"
-  if (length(schema$trueValues) == 1 && length(schema$falseValues) == 1) {
+  if (is.null(schema$missingValues) && length(schema$trueValues) == 1 && 
+      length(schema$falseValues) == 1) {
     if (schema$trueValues == "TRUE" && schema$falseValues == "FALSE")
       res <- "logical"
     if (schema$trueValues == "True" && schema$falseValues == "False")
@@ -154,7 +156,7 @@ csv_format_boolean <- function(x, schema = attr(x, "schema")) {
   }
   if (is.logical(x) && ("TRUE" %in% schema$trueValues) && 
       ("FALSE" %in% schema$falseValues)) {
-    # We can write as is as R writes TRUE/FALSE by default
+    # We can as is as R writes TRUE/FALSE by default
     x
   } else {
     trueval <- utils::head(schema$trueValues, 1)

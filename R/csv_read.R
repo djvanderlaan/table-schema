@@ -48,7 +48,6 @@
 csv_read <- function(filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
     use_fread = FALSE, to_factor = TRUE, ...) {
-  #if (is.character(schema)) schema <- jsonlite::read_json(schema)
   if (is.character(schema)) schema <- read_schema(schema)
   # Determine how we need to read each of the columns
   colclasses <- sapply(schema$fields, csv_colclass)

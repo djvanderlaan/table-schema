@@ -77,8 +77,9 @@ to_number.numeric <- function(x, schema = list(), to_factor = TRUE) {
 to_number.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_number(schema)
   # Consider "" as a NA
-  na_values <- ""
+  na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""
   na <- x %in% na_values | is.na(x);
+  x[x %in% na_values] <- NA
   if (!is.null(schema$groupChar)) 
     x <- gsub(schema$groupChar, "", x, fixed = TRUE)
   if (schema$decimalChar != ".") 
@@ -97,7 +98,8 @@ to_number.character <- function(x, schema = list(), to_factor = TRUE) {
 #' @export
 csv_colclass_number <- function(schema = list()) {
   schema <- complete_schema_number(schema)
-  if (!is.null(schema$groupChar) || schema$decimalChar != ".") {
+  if (!is.null(schema$groupChar) || schema$decimalChar != "." || 
+      !is.null(schema$missingValues)) {
     "character"
   } else {
     "numeric"

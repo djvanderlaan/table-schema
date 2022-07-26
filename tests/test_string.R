@@ -34,9 +34,25 @@ expect_attribute(res, "schema", schema)
 res <- to_string(character(0))
 expect_equal(res, character(0), attributes = FALSE)
 
+# === NA
+schema <- list(
+  type = "string",
+  missingValues = c("NA", "<NA>")
+)
+res <- to_string(c("a", "NA", "<NA>", NA), schema)
+expect_equal(res, c("a", NA, NA, NA), attributes = FALSE)
+
 # =============================================================================
 # csv_colclass
 
 res <- csv_colclass_string(list()) 
+expect_equal(res, "character")
+
+# === NA
+schema <- list(
+  type = "string",
+  missingValues = c("NA", "<NA>")
+)
+res <- csv_colclass_string(schema)
 expect_equal(res, "character")
 

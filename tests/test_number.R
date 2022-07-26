@@ -101,6 +101,14 @@ expect_equal(res, c(10, -100000.3, 1023.12, -Inf, NaN, NA, -1.3E6, 4.3E-5, NA),
   attributes = FALSE)
 expect_attribute(res, "schema", schema)
 
+# === NA
+schema <- list(
+  name = "number",
+  missingValues = c("--")
+)
+res <- to_number(c("10","--", "11", NA), schema)
+expect_equal(res, c(10, NA, 11, NA), attributes = FALSE)
+expect_error(res <- to_number(c("10","---", "11", NA), schema))
 
 # =============================================================================
 # csv_colclass
@@ -119,3 +127,10 @@ schema <- list(
 res <- csv_colclass_number(schema) 
 expect_equal(res, "character")
 
+# === NA
+schema <- list(
+  name = "number",
+  missingValues = c("--")
+)
+res <- csv_colclass_number(schema)
+expect_equal(res, "character")

@@ -80,8 +80,9 @@ to_integer.numeric <- function(x, schema = list(), to_factor = TRUE) {
 to_integer.character <- function(x, schema = list(), to_factor = TRUE) {
   schema <- complete_schema_integer(schema)
   # Consider "" as a NA
-  na_values <- ""
+  na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""
   na <- x %in% na_values | is.na(x);
+  x[x %in% na_values] <- NA
   res <- suppressWarnings(as.integer(x))
   invalid <- is.na(res) & !na
   if (any(invalid)) 
@@ -96,7 +97,10 @@ to_integer.character <- function(x, schema = list(), to_factor = TRUE) {
 #' @rdname csv_colclass
 #' @export
 csv_colclass_integer <- function(schema = list()) {
-  "integer"
+  # When there are specific strings that encode a missing values we have to
+  # read the field as character; otherwise we can leave the conversion to
+  # integer to the csv reader.
+  if (!is.null(schema$missingValues)) "character" else "integer"
 }
 
 #' @rdname csv_format
