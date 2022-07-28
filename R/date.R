@@ -101,7 +101,7 @@ to_date.character <- function(x, schema = list(), to_factor = TRUE, ...) {
 
 #' @rdname csv_colclass
 #' @export
-csv_colclass_date <- function(schema = list()) {
+csv_colclass_date <- function(schema = list(), ...) {
   "character"
 }
 

@@ -82,15 +82,34 @@ expect_equal(dta$factor1, factor(numeric(0), levels = 1:4,
 expect_equal(levels(dta$factor1), c("Female", "Male", "Other",  "Not given"))
 
 # === ; separator
-txt <- "col1;col2\n102;20"
+txt <- "col1;col2\n102.2;20"
 schema <- list(fields=list(
-    list(name="col1",type="integer"), 
+    list(name="col1",type="number"), 
     list(name="col2",type="integer")
   ))
 dta <- csv_read(textConnection(txt), delimiter = ";", schema = schema)
-expect_equal(dta$col1, 102L, attributes = FALSE)
+expect_equal(dta$col1, 102.2, attributes = FALSE)
 expect_equal(dta$col2, 20L, attributes = FALSE)
 dta <- csv_read(txt, delimiter = ";", schema = schema, use_fread = TRUE)
-expect_equal(dta$col1, 102L, attributes = FALSE)
+expect_equal(dta$col1, 102.2, attributes = FALSE)
 expect_equal(dta$col2, 20L, attributes = FALSE)
 
+# TODO: test decimalChar
+txt <- "col1;col2;col3\n102,2;20;-10.1"
+schema <- list(fields=list(
+    list(name="col1", type="number", groupChar = "."), 
+    list(name="col2", type="integer"),
+    list(name="col3", type="number", decimalChar=".")
+  ))
+dta <- csv_read(textConnection(txt), delimiter = ";", schema = schema, 
+  decimalChar = ",")
+expect_equal(dta$col1, 102.2, attributes = FALSE)
+expect_equal(dta$col2, 20L, attributes = FALSE)
+expect_equal(dta$col3, -10.1, attributes = FALSE)
+
+dta <- csv_read(txt, delimiter = ";", schema = schema, use_fread = TRUE, 
+  decimalChar = ",")
+
+expect_equal(dta$col1, 102.2, attributes = FALSE)
+expect_equal(dta$col2, 20L, attributes = FALSE)
+expect_equal(dta$col3, -10.1, attributes = FALSE)

@@ -1,12 +1,12 @@
-# TODO: handle ; separator  
-
-
 #' Read data from a CSV-file using table-schema
 #'
 #' @param filename the name of the CSV-file
 #' @param schema the name of the file containing the table-schema.
 #' @param delimiter the field separator character. See the \code{sep} argument
 #'   of \code{\link[utils]{read.csv}} and \code{\link[data.table]{fread}}.
+#' @param decimalChar the decimal separator to use in number field. Note that 
+#'   separator is only used for a field when the field schema does not specify a 
+#'   separator to use.
 #' @param use_fread use the \code{\link[data.table]{fread}} function instead of
 #'   \code{\link[utils]{read.csv}} and return a \code{data.table}.
 #' @param to_factor convert columns to factor if the schema has a categories
@@ -49,11 +49,12 @@
 #' @export
 csv_read <- function(filename, 
     schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
-    delimiter = ",", 
+    delimiter = ",", decimalChar = c(".", ","),
     use_fread = FALSE, to_factor = TRUE, ...) {
   if (is.character(schema)) schema <- read_schema(schema)
+  decimalChar <- match.arg(decimalChar)
   # Determine how we need to read each of the columns
-  colclasses <- sapply(schema$fields, csv_colclass)
+  colclasses <- sapply(schema$fields, csv_colclass, decimalChar = decimalChar)
   # Missing values
   nastrings <- if (!is.null(schema$missingValues)) schema$missingValues else ""
   nastrings <- as.character(nastrings)
@@ -62,11 +63,14 @@ csv_read <- function(filename,
     if (!requireNamespace("data.table")) stop("In order to use ", 
         "'use_fread=TRUE' the data.table package needs to be installed.")
     dta <- data.table::fread(filename, colClasses = colclasses, 
-      stringsAsFactors = FALSE, na.strings = nastrings, sep = delimiter, ...)
+      stringsAsFactors = FALSE, na.strings = nastrings, sep = delimiter, 
+      dec = decimalChar, ...)
   } else {
     dta <- utils::read.csv(filename, colClasses = colclasses, 
-      stringsAsFactors = FALSE, na.strings = nastrings, sep = delimiter, ...)
+      stringsAsFactors = FALSE, na.strings = nastrings, sep = delimiter, 
+      dec = decimalChar, ...)
   }
-  convert_using_schema(dta, schema, to_factor = to_factor)
+  convert_using_schema(dta, schema, to_factor = to_factor, 
+    decimalChar = decimalChar)
 }
 

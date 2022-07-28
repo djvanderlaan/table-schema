@@ -129,7 +129,7 @@ to_boolean.logical <- function(x, schema = list(), to_factor = TRUE, ...) {
 
 #' @rdname csv_colclass
 #' @export
-csv_colclass_boolean <- function(schema = list()) {
+csv_colclass_boolean <- function(schema = list(), ...) {
   schema <- complete_schema_boolean(schema)
   res <- "character"
   if (is.null(schema$missingValues) && length(schema$trueValues) == 1 && 

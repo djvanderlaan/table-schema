@@ -97,7 +97,7 @@ to_integer.character <- function(x, schema = list(), to_factor = TRUE, ...) {
 
 #' @rdname csv_colclass
 #' @export
-csv_colclass_integer <- function(schema = list()) {
+csv_colclass_integer <- function(schema = list(), ...) {
   # When there are specific strings that encode a missing values we have to
   # read the field as character; otherwise we can leave the conversion to
   # integer to the csv reader.

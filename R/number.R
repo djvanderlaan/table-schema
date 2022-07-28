@@ -33,25 +33,24 @@ schema_number <- function(name, description = NULL, decimalChar = ".",
 #' Add required fields to the schema for an number column
 #'
 #' @param schema should be a list.
-#' @param decimalChar character used to separate the decimal part of the 
-#'   number.
 #'
 #' @return
 #' Returns \code{schema} with the required fields added. 
 #' 
 #' @export
-complete_schema_number <- function(schema, decimalChar = ".") {
+complete_schema_number <- function(schema) {
   if (!exists("type", schema)) schema[["type"]] <- "number"
-  if (!exists("decimalChar", schema)) schema[["decimalChar"]] <- decimalChar
   schema
 }
 
 #' Convert a vector to 'number' using the specified schema
 #' 
 #' @param x the vector to convert.
-#' @param schema the table-schema for the field.
+#' @param schema the field schema for the field.
 #' @param to_factor convert to factor if the schema has a categories
 #'   field. 
+#' @param decimalChar decimal separator. Used when the field schema does not
+#'   specify a decimal separator.
 #' @param ... passed on to other methods.
 #'
 #' @details
@@ -71,7 +70,7 @@ to_number <- function(x, schema = list(), to_factor = TRUE,
 #' @export
 to_number.numeric <- function(x, schema = list(), to_factor = TRUE, 
     decimalChar = ".", ...) {
-  schema <- complete_schema_number(schema, decimalChar = decimalChar)
+  schema <- complete_schema_number(schema)
   # Handle categories
   if (to_factor && !is.null(schema$categories)) 
     x <- to_factor(x, schema)
@@ -81,15 +80,17 @@ to_number.numeric <- function(x, schema = list(), to_factor = TRUE,
 #' @export
 to_number.character <- function(x, schema = list(), to_factor = TRUE, 
     decimalChar = ".", ...) {
-  schema <- complete_schema_number(schema, decimalChar = decimalChar)
+  schema <- complete_schema_number(schema)
+  decimalChar <- if (is.null(schema$decimalChar)) 
+    decimalChar else schema$decimalChar
   # Consider "" as a NA
   na_values <- if (!is.null(schema$missingValues)) schema$missingValues else ""
   na <- x %in% na_values | is.na(x);
   x[x %in% na_values] <- NA
   if (!is.null(schema$groupChar)) 
     x <- gsub(schema$groupChar, "", x, fixed = TRUE)
-  if (schema$decimalChar != ".") 
-    x <- gsub(schema$decimalChar, ".", x, fixed = TRUE)
+  if (decimalChar != ".") 
+    x <- gsub(decimalChar, ".", x, fixed = TRUE)
   res <- suppressWarnings(as.numeric(x))
   invalid <- is.na(res) & !na & !is.nan(res)
   if (any(invalid)) 
@@ -100,11 +101,13 @@ to_number.character <- function(x, schema = list(), to_factor = TRUE,
   structure(res, schema = schema)
 }
 
+#' @param decimalChar the decimal separator used when reading the CSV-file.
 #' @rdname csv_colclass
 #' @export
-csv_colclass_number <- function(schema = list()) {
+csv_colclass_number <- function(schema = list(), decimalChar = ".", ...) {
   schema <- complete_schema_number(schema)
-  if (!is.null(schema$groupChar) || schema$decimalChar != "." || 
+  dec <- if (is.null(schema$decimalChar)) decimalChar else schema$decimalChar
+  if (!is.null(schema$groupChar) || dec != decimalChar || 
       !is.null(schema$missingValues)) {
     "character"
   } else {

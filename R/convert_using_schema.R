@@ -5,6 +5,8 @@
 #' @param schema an object with the table schema
 #' @param to_factor convert columns to factor if the schema has a categories
 #'   field for the column.
+#' @param ... additional arguments are passed on to the \code{to_<fieldtype>} 
+#'   functions (e.g. \code{\link{to_number}}). 
 #'
 #' @details
 #' Converts each column in \code{dta} to the correct R-type using the type
@@ -14,6 +16,11 @@
 #' separator and thousands separator specified in the schema (or default values
 #' for these if not). 
 #'
+#' @seealso
+#' This function calls conversion functions for each of the columns, see 
+#' \code{\link{to_number}}, \code{\link{to_boolean}}, \code{\link{to_integer}}, 
+#' and \code{\link{to_date}}.
+#'
 #' @examples
 #' schema <- list(fields = list(
 #'   list(name = "field1", type = "number", decimalChar=",")
@@ -22,7 +29,7 @@
 #' convert_using_schema(dta, schema)
 #'
 #' @export
-convert_using_schema <- function(dta, schema, to_factor = TRUE) {
+convert_using_schema <- function(dta, schema, to_factor = TRUE, ...) {
   # Check columnnames
   colnames <- sapply(schema$fields, function(x) x$name)
   if (!all(names(dta) == colnames)) 
@@ -36,9 +43,9 @@ convert_using_schema <- function(dta, schema, to_factor = TRUE) {
     col <- names(dta)[i]
     if (is_data_table) {
       data.table::set(dta, j = col, 
-        value = fun(dta[[col]], schema$fields[[i]], to_factor))
+        value = fun(dta[[col]], schema$fields[[i]], to_factor, ...))
     } else {
-      dta[[i]] <- fun(dta[[i]], schema$fields[[i]], to_factor)
+      dta[[i]] <- fun(dta[[i]], schema$fields[[i]], to_factor, ...)
     }
   }
   # The fields schema is stored in the fields; drop it

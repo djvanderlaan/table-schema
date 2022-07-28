@@ -39,6 +39,7 @@ complete_schema_string <- function(schema) {
 #' @param schema the table-schema for the field.
 #' @param to_factor convert to factor if the schema has a categories
 #'   field. 
+#' @param ... passed on to other methods.
 #'
 #' @details
 #' When \code{schema} is missing a default schema is generated using
@@ -49,12 +50,12 @@ complete_schema_string <- function(schema) {
 #' 'schema' attribute.
 #' 
 #' @export
-to_string <- function(x, schema = list(), to_factor = TRUE) {
+to_string <- function(x, schema = list(), to_factor = TRUE, ...) {
   UseMethod("to_string")
 }
 
 #' @export
-to_string.character <- function(x, schema = list(), to_factor = TRUE) {
+to_string.character <- function(x, schema = list(), to_factor = TRUE, ...) {
   schema <- complete_schema_string(schema)
   # Handle missing values
   na_values <- if (!is.null(schema$missingValues)) schema$missingValues else
@@ -68,7 +69,7 @@ to_string.character <- function(x, schema = list(), to_factor = TRUE) {
 
 #' @rdname csv_colclass
 #' @export
-csv_colclass_string <- function(schema = list()) {
+csv_colclass_string <- function(schema = list(), ...) {
   "character"
 }
 

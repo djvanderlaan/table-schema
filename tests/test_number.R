@@ -12,7 +12,7 @@ res <- tableschema:::to_number.character(c("10", "-100.3", "Inf", "-Inf", "NaN",
     "+4.3E-5", NA), schema = schema)
 expect_equal(res, c(10, -100.3, Inf, -Inf, NaN, NA, -1.3E6, 4.3E-5, NA), 
   attributes = FALSE)
-expect_attribute(res, "schema", c(schema, list(decimalChar = ".")))
+expect_attribute(res, "schema", schema)
 
 # Case sensitivity
 res <- tableschema:::to_number.character(c("10", "-100.3", "inf", "-inf", "nan", "", "-1.3E+6", 
@@ -35,7 +35,7 @@ res <- tableschema:::to_number.numeric(c(10, -100.3, Inf, -Inf, NaN, NA, -1.3E+6
     +4.3E-5, NA), schema = schema)
 expect_equal(res, c(10, -100.3, Inf, -Inf, NaN, NA, -1.3E6, 4.3E-5, NA), 
   attributes = FALSE)
-expect_attribute(res, "schema", c(schema, list(decimalChar = ".")))
+expect_attribute(res, "schema", schema)
 
 
 # === Method call
@@ -49,12 +49,11 @@ res <- to_number(c("10", "-100.3", "Inf", "-Inf", "NaN", "", "-1.3E+6",
     "+4.3E-5", NA), schema = schema)
 expect_equal(res, c(10, -100.3, Inf, -Inf, NaN, NA, -1.3E6, 4.3E-5, NA), 
   attributes = FALSE)
-expect_attribute(res, "schema", c(schema, list(decimalChar = ".")))
+expect_attribute(res, "schema", schema)
 
 # === No Schema
 schema <- list(
-  type = "number",
-  decimalChar = "."
+  type = "number"
 )
 res <- to_number(c("10", "-100.3", "Inf", "-Inf", "NaN", "", "-1.3E+6", 
     "+4.3E-5", NA))
@@ -109,10 +108,6 @@ schema <- list(
 res <- to_number(c("10","--", "11", NA), schema)
 expect_equal(res, c(10, NA, 11, NA), attributes = FALSE)
 expect_error(res <- to_number(c("10","---", "11", NA), schema))
-
-# decimalChar argument
-res <- to_number(c("10,20", "", NA), decimalChar = ",")
-expect_equal(res, c(10.2, NA, NA), attributes = FALSE)
 
 # =============================================================================
 # csv_colclass
