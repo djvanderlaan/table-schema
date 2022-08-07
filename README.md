@@ -44,6 +44,7 @@ TODO List
 - [x] Handle factor columns
 - [x] Specify missing values at file level 
 - [x] Specify missing values at column level (not in standard)
+- [ ] Pass schema directly to csv_write
 - [ ] Load categories from external source
 - [ ] Specify categorical levels that can be considered as missing value.
 - [ ] Allow categories field to be a pointer to a file.

@@ -51,6 +51,19 @@ csv_write(dta[FALSE, ], fn, fn_schema)
 dta2 <- csv_read(fn, schema = fn_schema)
 expect_equal(dta[FALSE,], dta2, attributes = FALSE)
 
+# ===
+# decimalChar should not equal the field delimiter
+data(iris)
+expect_error(csv_write(iris, decimalChar = ","))
+expect_error(csv_write(iris, decimalChar = ".", delimiter = "."))
+schema <- build_schema(iris)
+schema$fields[[1]]$decimalChar <- ","
+attr(iris, "schema") <- schema
+attr(iris[[1]], "schema") <- schema$fields[[1]]
+# TODO: pass schema to csv_write
+expect_error(csv_write(iris))
+expect_error(csv_write(iris, delimiter = "."))
+
 
 # Cleanup
 file.remove(fn)
