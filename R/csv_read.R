@@ -1,7 +1,8 @@
 #' Read data from a CSV-file using table-schema
 #'
 #' @param filename the name of the CSV-file
-#' @param schema the name of the file containing the table-schema.
+#' @param schema the name of the file containing the table-schema (when of type
+#'   character) or the table schema directly (otherwise).
 #' @param delimiter the field separator character. See the \code{sep} argument
 #'   of \code{\link[utils]{read.csv}} and \code{\link[data.table]{fread}}.
 #' @param decimalChar the decimal separator to use in number field. Note that 

@@ -15,7 +15,7 @@ fn_schema <- tempfile()
 
 # ===
 # Write file and read back; should remain the same
-csv_write(dta, fn, fn_schema)
+csv_write(dta, fn, filename_schema = fn_schema)
 dta2 <- csv_read(fn, schema = fn_schema)
 expect_equal(dta, dta2, attributes = FALSE)
 
@@ -35,19 +35,19 @@ schema <- build_schema(dta$number)
 schema$decimalChar <- "|"
 attr(dta$number, "schema") <- schema
 
-csv_write(dta, fn, fn_schema)
+csv_write(dta, fn, filename_schema = fn_schema)
 dta2 <- csv_read(fn, schema = fn_schema)
 expect_equal(dta, dta2, attributes = FALSE)
 
 # ===
 # data.table
-csv_write(dta, fn, fn_schema)
+csv_write(dta, fn, filename_schema = fn_schema)
 dta2 <- csv_read(fn, schema = fn_schema, use_fread = TRUE, data.table = TRUE)
 expect_equal(data.table::as.data.table(dta), dta2, attributes = FALSE)
 
 # ===
 # Empty dataset
-csv_write(dta[FALSE, ], fn, fn_schema)
+csv_write(dta[FALSE, ], fn, filename_schema = fn_schema)
 dta2 <- csv_read(fn, schema = fn_schema)
 expect_equal(dta[FALSE,], dta2, attributes = FALSE)
 
@@ -58,11 +58,8 @@ expect_error(csv_write(iris, decimalChar = ","))
 expect_error(csv_write(iris, decimalChar = ".", delimiter = "."))
 schema <- build_schema(iris)
 schema$fields[[1]]$decimalChar <- ","
-attr(iris, "schema") <- schema
-attr(iris[[1]], "schema") <- schema$fields[[1]]
-# TODO: pass schema to csv_write
-expect_error(csv_write(iris))
-expect_error(csv_write(iris, delimiter = "."))
+expect_error(csv_write(iris, schema = schema))
+expect_error(csv_write(iris, schema = schema, delimiter = "."))
 
 
 # Cleanup

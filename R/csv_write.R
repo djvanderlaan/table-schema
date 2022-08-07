@@ -4,12 +4,13 @@
 #' @param x the dataset to write to file. 
 #' @param filename the name of the CSV-file. If empty string the contents are
 #'   written to the console.
-#' @param schema the name fo the JSON-file to which the schema should be
+#' @param filename_schema the name fo the JSON-file to which the schema should be
 #'   written. If missing and \code{filename} is an empty string the output is 
 #'   written to the console.
+#' @param schema the table schema beloning to the dataset being written.
 #' @param delimiter the field separator character. See the \code{sep} argument
 #'   of \code{\link[utils]{read.csv}} and \code{\link[data.table]{fread}}.
-#' @param decimalChar the decimal separator to use in number field. Note that 
+#' @param decimalChar the decimal separator to use in number field. Note that the
 #'   separator is only used for a field when the field schema does not specify a 
 #'   separator to use.
 #' @param ... ignored for now.
@@ -27,13 +28,12 @@
 #' 
 #' @export
 csv_write <- function(x, filename = "", 
-    schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
-    delimiter = ",", decimalChar = ".",
+    filename_schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
+    schema = build_schema(x), delimiter = ",", decimalChar = ".",
     ...) {
-  if (filename == "" && missing(schema)) schema = stdout()
-  schema_df <- build_schema(x)
-  if (decimalChar != ".") schema_df <- set_decimalchar(schema_df, decimalChar, FALSE)
-  delimiter_ok <- sapply(schema_df$fields, function(x) x$type != "number" || 
+  if (filename == "" && missing(filename_schema)) filename_schema = stdout()
+  if (decimalChar != ".") schema <- set_decimalchar(schema, decimalChar, FALSE)
+  delimiter_ok <- sapply(schema$fields, function(x) x$type != "number" || 
     is.null(x$decimalChar) || x$decimalChar != delimiter)
   delimiter_ok <- all(delimiter_ok)
   if (delimiter == decimalChar || !delimiter_ok)
@@ -43,36 +43,23 @@ csv_write <- function(x, filename = "",
   # be quoted in the output
   quote <- which(sapply(x, is.character))
   # Format the fields (if necessary)
-  for (col in names(x)) {
-    s <- build_schema(x[[col]], col)
-    if (decimalChar != ".") s <- set_decimalchar(s, decimalChar, FALSE)
-    attr(x[[col]], "schema") <- s # setattr for data.table
-    x[[col]] <- csv_format(x[[col]], s)
-  }
+  for (i in seq_along(x)) 
+    x[[i]] <- csv_format(x[[i]], schema$fields[[i]])
   # How to write missing values
-  nastrings <- if (!is.null(schema_df$missingValues)) schema_df$missingValues else ""
+  nastrings <- if (!is.null(schema$missingValues)) schema$missingValues else ""
   na <- if (length(nastrings) > 0) nastrings[1] else ""
   # Write
   utils::write.table(x, file = filename, na = na, row.names = FALSE, 
-    fileEncoding = "UTF-8", quote = quote, sep = delimiter, dec = ".", qmethod = "double")
-  write_schema(schema_df, schema, pretty = TRUE)
+    fileEncoding = "UTF-8", quote = quote, sep = delimiter, dec = ".", 
+    qmethod = "double")
+  write_schema(schema, filename_schema, pretty = TRUE)
 }
 
 set_decimalchar <- function(schema, value, all = TRUE) {
-  if (!is.null(schema$fields)) {
-    # assume table schema
-    for (i in seq_along(schema$fields)) {
-      if (schema$fields[[i]]$type == "number") {
-        if (all || is.null(schema$fields[[i]]$decimalChar)) {
-          schema$fields[[i]]$decimalChar <- value
-        }
-      }
-    }
-  } else {
-    # assume field schema
-    if (!is.null(schema$type) && schema$type == "number") {
-      if (all || is.null(schema$decimalChar)) {
-        schema$decimalChar <- value
+  for (i in seq_along(schema$fields)) {
+    if (schema$fields[[i]]$type == "number") {
+      if (all || is.null(schema$fields[[i]]$decimalChar)) {
+        schema$fields[[i]]$decimalChar <- value
       }
     }
   }
