@@ -15,7 +15,7 @@
 #' creating a file.
 #' 
 #' @export
-write_schema <- function(schema, filename, pretty = TRUE, ...) {
+write_schema <- function(schema, filename = stdout(), pretty = TRUE, ...) {
   # Some fields should be stored as a vector even when they contain
   # only a single values; make sure that they are indeed stored as
   # a vector

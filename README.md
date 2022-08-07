@@ -37,17 +37,16 @@ TODO List
 
 - [x] CSV-writer
 - [x] Documentation of functions
-- [ ] Handle European CSV-format (';' and ',' vs ',' and '.') in `csv_read` and
+- [x] Handle European CSV-format (';' and ',' vs ',' and '.') in `csv_read` and
       `csv_write`.
 - [x] Handle date columns
 - [x] Let `csv_write` also write to stdout
 - [x] Handle factor columns
 - [x] Specify missing values at file level 
 - [x] Specify missing values at column level (not in standard)
-- [ ] Pass schema directly to csv_write
+- [x] Pass schema directly to csv_write
 - [ ] Load categories from external source
 - [ ] Specify categorical levels that can be considered as missing value.
-- [ ] Allow categories field to be a pointer to a file.
 - [ ] Reader and writers for other file types (fst, feather, parquet) 
       than csv (separate package?)
 

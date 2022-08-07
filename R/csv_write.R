@@ -29,7 +29,7 @@
 #' @export
 csv_write <- function(x, filename = "", 
     filename_schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
-    schema = build_schema(x), delimiter = ",", decimalChar = ".",
+    schema = schema(x), delimiter = ",", decimalChar = ".",
     ...) {
   if (filename == "" && missing(filename_schema)) filename_schema = stdout()
   if (decimalChar != ".") schema <- set_decimalchar(schema, decimalChar, FALSE)
@@ -55,6 +55,9 @@ csv_write <- function(x, filename = "",
   write_schema(schema, filename_schema, pretty = TRUE)
 }
 
+
+# Set the decimalChar for number fields that don't already have it set (or all
+# if all = TRUE).
 set_decimalchar <- function(schema, value, all = TRUE) {
   for (i in seq_along(schema$fields)) {
     if (schema$fields[[i]]$type == "number") {
