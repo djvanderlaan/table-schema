@@ -117,8 +117,7 @@ csv_colclass_number <- function(schema = list(), decimalChar = ".", ...) {
 
 #' @rdname csv_format
 #' @export
-csv_format_number <- function(x, schema = attr(x, "schema")) {
-  if (is.null(schema)) schema <- build_schema(x)
+csv_format_number <- function(x, schema = tableschema::schema(x)) {
   if (!is.null(schema$categories)) {
     # We are dealing with a categorical variable that is stored as 
     # a number

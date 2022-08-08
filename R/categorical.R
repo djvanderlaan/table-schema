@@ -56,8 +56,7 @@ to_factor <- function(x, schema) {
 }
 
 
-csv_format_categorical <- function(x, schema = attr(x, "schema")) {
-  if (is.null(schema)) schema <- build_schema(x)
+csv_format_categorical <- function(x, schema = tableschema::schema(x)) {
   categories <- get_categories(schema)
   if (is.null(categories)) stop("the categories element is missing ", 
     "from the field schema: x is not a categorical field.")

@@ -120,8 +120,7 @@ csv_colclass_integer <- function(schema = list(), ...) {
 
 #' @rdname csv_format
 #' @export
-csv_format_integer <- function(x, schema = attr(x, "schema")) {
-  if (is.null(schema)) schema <- build_schema(x)
+csv_format_integer <- function(x, schema = tableschema::schema(x)) {
   if (!is.null(schema$categories)) {
     # We are dealing with a categorical variable that is stored as 
     # an integer

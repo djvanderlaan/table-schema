@@ -29,7 +29,7 @@
 #' @export
 csv_write <- function(x, filename = "", 
     filename_schema = paste0(tools::file_path_sans_ext(filename), ".schema.json"), 
-    schema = schema(x), delimiter = ",", decimalChar = ".",
+    schema = tableschema::schema(x), delimiter = ",", decimalChar = ".",
     ...) {
   if (filename == "" && missing(filename_schema)) filename_schema = stdout()
   if (decimalChar != ".") schema <- set_decimalchar(schema, decimalChar, FALSE)

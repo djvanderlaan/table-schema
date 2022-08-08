@@ -22,16 +22,16 @@ expect_equal(dta, dta2, attributes = FALSE)
 # ===
 # Write some columns differenty than the default; still writing and 
 # then reading should result in the same data.table
-schema <- build_schema(dta$date)
+schema <- generate_schema(dta$date)
 schema$format <- "%Y%m%d"
 attr(dta$date, "schema") <- schema
 
-schema <- build_schema(dta$boolean)
+schema <- generate_schema(dta$boolean)
 schema$trueValues <- c("1")
 schema$falseValues <- c("0")
 attr(dta$boolean, "schema") <- schema
 
-schema <- build_schema(dta$number)
+schema <- generate_schema(dta$number)
 schema$decimalChar <- "|"
 attr(dta$number, "schema") <- schema
 
@@ -56,7 +56,7 @@ expect_equal(dta[FALSE,], dta2, attributes = FALSE)
 data(iris)
 expect_error(csv_write(iris, decimalChar = ","))
 expect_error(csv_write(iris, decimalChar = ".", delimiter = "."))
-schema <- build_schema(iris)
+schema <- generate_schema(iris)
 schema$fields[[1]]$decimalChar <- ","
 expect_error(csv_write(iris, schema = schema))
 expect_error(csv_write(iris, schema = schema, delimiter = "."))

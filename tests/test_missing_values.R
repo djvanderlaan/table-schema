@@ -29,7 +29,7 @@ expect_equal(d, dta, attributes = FALSE)
 
 # ===
 # Non-default value; should take first one
-schema <- build_schema(dta)
+schema <- generate_schema(dta)
 schema$missingValues <- c("FOO", "BAR")
 attr(dta, "schema") <- schema
 csv_write(dta, fn, fn_schema)
@@ -47,7 +47,7 @@ expect_equal(d, dta, attributes = FALSE)
 
 # ===
 # Non-default value; should take first one
-schema <- build_schema(dta)
+schema <- generate_schema(dta)
 schema$missingValues <- character(0)
 attr(dta, "schema") <- schema
 csv_write(dta, fn, fn_schema)

@@ -10,8 +10,7 @@
 #' 
 #' @rdname csv_format
 #' @export
-csv_format <- function(x, schema = attr(x, "schema")) {
-  if (is.null(schema)) schema <- build_schema(x)
+csv_format <- function(x, schema = tableschema::schema(x)) {
   type <- schema$type
   format_fun <- paste0("csv_format_", type)
   format_fun <- get(format_fun)

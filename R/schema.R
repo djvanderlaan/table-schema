@@ -22,7 +22,7 @@ schema <- function(x, attribute, ...) {
 #' @rdname schema
 #' @export
 schema.default <- function(x, attribute, ...) {
-  schema <- build_schema(x)
+  schema <- generate_schema(x)
   if (!missing(attribute)) schema[[attribute]] else schema
 }
 
